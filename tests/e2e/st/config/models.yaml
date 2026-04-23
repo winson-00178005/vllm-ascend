@@ -1,0 +1,56 @@
+version: "v1.0"
+model_groups:
+  dense_models:
+    - name: "Qwen/Qwen3-8B"
+      supported_scenes: ["SINGLECARD", "MULTICARD_2Cards"]
+      max_model_len: 8192
+      tp_size: [1, 2]
+
+    - name: "Qwen/Qwen3-30B-A3B"
+      supported_scenes: ["MULTICARD_2Cards", "MULTICARD_4Cards"]
+      max_model_len: 8192
+      tp_size: [2, 4]
+
+    - name: "vllm-ascend/Qwen3-0.6B-W8A8"
+      supported_scenes: ["SINGLECARD", "MULTICARD_2Cards", "MULTICARD_4Cards"]
+      max_model_len: 8192
+      tp_size: [1, 2, 4]
+      quantizations: ["ascend"]
+
+  moe_models:
+    - name: "Qwen/Qwen3-235B-A22B"
+      supported_scenes: ["MULTICARD_4Cards"]
+      max_model_len: 4096
+      tp_size: [4]
+      enable_expert_parallel: true
+
+    - name: "Qwen/Qwen3-30B-A3B"
+      supported_scenes: ["MULTICARD_2Cards", "MULTICARD_4Cards"]
+      max_model_len: 8192
+      tp_size: [2, 4]
+      enable_expert_parallel: true
+
+    - name: "Qwen/Qwen3-Next-80B-A3B-Instruct"
+      supported_scenes: ["MULTICARD_4Cards"]
+      max_model_len: 4096
+      tp_size: [4]
+      enable_expert_parallel: true
+
+  vl_models:
+    - name: "Qwen/Qwen3-VL-8B-Instruct"
+      supported_scenes: ["SINGLECARD"]
+      max_model_len: 8192
+      tp_size: [1]
+      is_multimodal: true
+
+    - name: "Qwen/Qwen2-Audio-7B-Instruct"
+      supported_scenes: ["SINGLECARD"]
+      max_model_len: 4096
+      tp_size: [1]
+      is_multimodal: true
+
+  310p_models:
+    - name: "Qwen/Qwen3-8B"
+      supported_scenes: ["310P_SINGLECARD"]
+      max_model_len: 4096
+      tp_size: [1]

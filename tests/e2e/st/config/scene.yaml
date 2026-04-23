@@ -1,0 +1,48 @@
+version: "v1.0"
+scenarios:
+  CPU:
+    name: "CPU测试"
+    hardware: "CPU"
+    tp_size: 1
+    dp_size: 1
+    env:
+      VLLM_WORKER_MULTIPROC_METHOD: "spawn"
+    description: "CPU推理场景"
+
+  SINGLECARD:
+    name: "单卡测试"
+    hardware: "Atlas A2 Series"
+    tp_size: 1
+    dp_size: 1
+    env:
+      VLLM_WORKER_MULTIPROC_METHOD: "spawn"
+    description: "单卡推理场景"
+
+  MULTICARD_2Cards:
+    name: "2卡测试"
+    hardware: "Atlas A2 Series"
+    tp_size: 2
+    dp_size: 1
+    env:
+      VLLM_WORKER_MULTIPROC_METHOD: "spawn"
+      ASCEND_RT_VISIBLE_DEVICES: "0,1"
+      HCCL_BUFFSIZE: "1024"
+    description: "2卡推理场景"
+
+  MULTICARD_4Cards:
+    name: "4卡测试"
+    hardware: "Atlas A2 Series"
+    tp_size: 4
+    dp_size: 1
+    env:
+      VLLM_WORKER_MULTIPROC_METHOD: "spawn"
+      ASCEND_RT_VISIBLE_DEVICES: "0,1,2,3"
+      HCCL_BUFFSIZE: "1024"
+    description: "4卡推理场景"
+
+  310P_SINGLECARD:
+    name: "310P单卡测试"
+    hardware: "Ascend 310P"
+    tp_size: 1
+    dp_size: 1
+    description: "310P单卡场景"
