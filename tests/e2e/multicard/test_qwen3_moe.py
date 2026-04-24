@@ -25,6 +25,9 @@ from modelscope import snapshot_download  # type: ignore
 
 from tests.e2e.conftest import VllmRunner
 
+# ST 框架：标记此文件适用于多卡 TP2 场景
+pytestmark = pytest.mark.scenario("multi_card_tp2")
+
 
 def test_models_distributed_Qwen3_MOE_TP2():
     example_prompts = [

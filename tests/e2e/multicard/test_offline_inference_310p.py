@@ -20,6 +20,9 @@ import vllm  # noqa: F401
 import vllm_ascend  # noqa: F401
 from tests.e2e.conftest import VllmRunner
 
+# ST 框架：标记此文件适用于 310P 场景（4 卡）
+pytestmark = pytest.mark.scenario("ascend_310p")
+
 # Pangu local model path
 MODELS = [
     "IntervitensInc/pangu-pro-moe-model",

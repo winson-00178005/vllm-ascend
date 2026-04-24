@@ -7,6 +7,9 @@ import pytest
 from tests.e2e.conftest import VllmRunner
 from tests.e2e.model_utils import check_outputs_equal
 
+# ST 框架：标记此文件适用于多卡 TP2 场景
+pytestmark = pytest.mark.scenario("multi_card_tp2")
+
 MODELS = [
     # for MHA
     "Qwen/Qwen3-8B-Base",

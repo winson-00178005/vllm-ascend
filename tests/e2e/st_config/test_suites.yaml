@@ -1,0 +1,152 @@
+# ST 测试套件配置（融合场景+模型+预估时间）
+# 参考 smart_ut 分支 config.yaml 设计
+
+e2e-singlecard:
+- name: tests/e2e/singlecard/test_offline_inference.py
+  estimated_time: 300
+  scenes: [single_card]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/singlecard/test_offline_inference_310p.py
+  estimated_time: 200
+  scenes: [ascend_310p]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/singlecard/test_guided_decoding.py
+  estimated_time: 413
+  scenes: [single_card]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/singlecard/test_camem.py
+  estimated_time: 128
+  scenes: [single_card]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/singlecard/test_embedding.py
+  estimated_time: 150
+  scenes: [single_card]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/singlecard/test_sampler.py
+  estimated_time: 254
+  scenes: [single_card]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/singlecard/test_chunked.py
+  estimated_time: 180
+  scenes: [single_card]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/singlecard/test_ascend_scheduler.py
+  estimated_time: 200
+  scenes: [single_card]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/singlecard/test_profile_execute_duration.py
+  estimated_time: 150
+  scenes: [single_card]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/singlecard/test_aclgraph.py
+  estimated_time: 300
+  scenes: [single_card]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/singlecard/test_pyhccl.py
+  estimated_time: 100
+  scenes: [single_card]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/singlecard/test_ilama_lora.py
+  estimated_time: 107
+  scenes: [single_card]
+  models: [Qwen3-8B-Base]
+
+e2e-multicard-tp2:
+- name: tests/e2e/multicard/test_offline_inference_distributed.py
+  estimated_time: 500
+  scenes: [multi_card_tp2]
+  models: [DeepSeek-V2-Lite, Qwen3-8B-Base]
+
+- name: tests/e2e/multicard/test_data_parallel.py
+  estimated_time: 426
+  scenes: [multi_card_dp2]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/multicard/test_pipeline_parallel.py
+  estimated_time: 200
+  scenes: [multi_card_tp2]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/multicard/test_torchair_graph_mode.py
+  estimated_time: 300
+  scenes: [multi_card_tp2]
+  models: [DeepSeek-V2-Lite]
+
+- name: tests/e2e/multicard/test_expert_parallel.py
+  estimated_time: 236
+  scenes: [multi_card_tp2]
+  models: [DeepSeek-V2-Lite]
+
+- name: tests/e2e/multicard/test_ilama_lora_tp2.py
+  estimated_time: 89
+  scenes: [multi_card_tp2]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/multicard/test_offline_inference_310p.py
+  estimated_time: 200
+  scenes: [ascend_310p]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/multicard/test_qwen3_moe.py
+  estimated_time: 400
+  scenes: [multi_card_tp2]
+  models: [Qwen3-30B-A3B]
+
+- name: tests/e2e/multicard/test_prefix_caching.py
+  estimated_time: 400
+  scenes: [multi_card_tp2]
+  models: [Qwen3-8B-Base, DeepSeek-V2-Lite]
+
+- name: tests/e2e/multicard/test_pyhccl_distributed.py
+  estimated_time: 150
+  scenes: [multi_card_tp2]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/multicard/test_external_launcher.py
+  estimated_time: 496
+  scenes: [multi_card_tp2]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/multicard/test_fused_moe_allgather_ep.py
+  estimated_time: 300
+  scenes: [multi_card_tp2]
+  models: [DeepSeek-V2-Lite]
+  is_skipped: true  # 当前实现可能导致 OOM
+
+- name: tests/e2e/multicard/test_dynamic_npugraph_batchsize.py
+  estimated_time: 200
+  scenes: [multi_card_tp2]
+  models: [Qwen3-8B-Base]
+
+e2e-singlecard-light:
+- name: tests/e2e/singlecard/test_offline_inference.py::test_models
+  estimated_time: 150
+  scenes: [single_card]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/singlecard/test_sampler.py::test_sampler
+  estimated_time: 100
+  scenes: [single_card]
+  models: [Qwen3-8B-Base]
+
+e2e-multicard-tp2-light:
+- name: tests/e2e/multicard/test_offline_inference_distributed.py::test_models_distributed_QwQ
+  estimated_time: 200
+  scenes: [multi_card_tp2]
+  models: [Qwen3-8B-Base]
+
+- name: tests/e2e/multicard/test_qwen3_moe.py::test_models_distributed_Qwen3_MOE_TP2
+  estimated_time: 191
+  scenes: [multi_card_tp2]
+  models: [Qwen3-30B-A3B]

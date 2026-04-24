@@ -18,6 +18,9 @@ import pytest
 
 from tests.e2e.conftest import VllmRunner
 
+# ST 框架：标记此文件适用于多卡 TP2 场景（PP=2 需要至少 2 卡）
+pytestmark = pytest.mark.scenario("multi_card_tp2")
+
 MODELS = [
     "Qwen/Qwen3-0.6B",
 ]

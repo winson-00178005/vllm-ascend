@@ -29,6 +29,9 @@ from unittest.mock import patch
 import pytest
 import torch_npu
 
+# ST 框架：标记此文件适用于多卡 TP2 场景
+pytestmark = pytest.mark.scenario("multi_card_tp2")
+
 MODELS = ["Qwen/Qwen3-0.6B"]
 MOE_MODELS = ["Qwen/Qwen3-30B-A3B"]
 DEVICE_NAME = torch_npu.npu.get_device_name(0)[:10]

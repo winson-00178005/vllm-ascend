@@ -5,6 +5,9 @@ from tests.e2e.conftest import VllmRunner
 from tests.e2e.singlecard.test_ilama_lora import (EXPECTED_LORA_OUTPUT,
                                                   MODEL_PATH, do_sample)
 
+# ST 框架：标记此文件适用于多卡 TP2 场景
+pytestmark = pytest.mark.scenario("multi_card_tp2")
+
 
 @pytest.mark.parametrize("distributed_executor_backend", ["mp"])
 def test_ilama_lora_tp2(distributed_executor_backend, ilama_lora_files):

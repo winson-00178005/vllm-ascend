@@ -3,6 +3,9 @@ import pytest
 from tests.e2e.conftest import VllmRunner
 from tests.e2e.model_utils import check_outputs_equal
 
+# ST 框架：标记此文件适用于多卡 TP2 场景
+pytestmark = pytest.mark.scenario("multi_card_tp2")
+
 
 @pytest.mark.parametrize("model_name", ["deepseek-ai/DeepSeek-V2-Lite-Chat"])
 def test_e2e_ep_correctness(model_name):

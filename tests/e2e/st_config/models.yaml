@@ -1,0 +1,63 @@
+# ST 模型配置定义
+# 每个模型包含：
+#   - model_id: HuggingFace 模型 ID
+#   - architecture: 模型架构名称
+#   - dtype: 数据类型
+#   - max_model_len: 最大序列长度
+#   - supported_scenes: 支持的场景列表
+#   - enable_test: 是否启用测试（默认 true）
+#   - is_multimodal: 是否多模态模型
+#   - is_moe: 是否 MoE 模型
+#   - min_gpu_gb: 最小 GPU 内存要求（GB）
+#   - hf_ppl: HuggingFace 参考 PPL（可选）
+
+models:
+  Qwen3-8B-Base:
+    model_id: "Qwen/Qwen3-8B-Base"
+    architecture: "Qwen3ForCausalLM"
+    dtype: "bfloat16"
+    max_model_len: 4096
+    supported_scenes:
+      - single_card
+      - multi_card_tp2
+      - multi_card_tp4
+    enable_test: true
+    min_gpu_gb: 16
+    hf_ppl: 8.5
+
+  DeepSeek-V2-Lite:
+    model_id: "deepseek-ai/DeepSeek-V2-Lite"
+    architecture: "DeepseekV2ForCausalLM"
+    dtype: "bfloat16"
+    max_model_len: 4096
+    supported_scenes:
+      - multi_card_tp2
+      - multi_card_tp4
+      - multi_card_dp2
+    enable_test: true
+    is_moe: true
+    min_gpu_gb: 32
+
+  Qwen2.5-VL-7B-Instruct:
+    model_id: "Qwen/Qwen2.5-VL-7B-Instruct"
+    architecture: "Qwen2_5_VLForConditionalGeneration"
+    dtype: "bfloat16"
+    max_model_len: 4096
+    supported_scenes:
+      - single_card
+      - multi_card_tp2
+    enable_test: true
+    is_multimodal: true
+    min_gpu_gb: 24
+
+  Qwen3-30B-A3B:
+    model_id: "Qwen/Qwen3-30B-A3B"
+    architecture: "Qwen3MoeForCausalLM"
+    dtype: "bfloat16"
+    max_model_len: 4096
+    supported_scenes:
+      - multi_card_tp4
+      - multi_card_dp2
+    enable_test: true
+    is_moe: true
+    min_gpu_gb: 64

@@ -30,6 +30,9 @@ from vllm.model_executor.models.registry import ModelRegistry
 
 from tests.e2e.conftest import VllmRunner
 
+# ST 框架：标记此文件适用于多卡 TP2 场景
+pytestmark = pytest.mark.scenario("multi_card_tp2")
+
 os.environ["PYTORCH_NPU_ALLOC_CONF"] = "max_split_size_mb:256"
 
 

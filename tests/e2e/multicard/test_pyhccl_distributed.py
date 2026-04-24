@@ -28,6 +28,9 @@ from tests.e2e.conftest import cleanup_dist_env_and_memory
 from vllm_ascend.distributed.device_communicators.pyhccl import \
     PyHcclCommunicator
 
+# ST 框架：标记此文件适用于多卡 TP2 场景
+pytestmark = pytest.mark.scenario("multi_card_tp2")
+
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 multiprocessing.set_start_method("spawn", force=True)

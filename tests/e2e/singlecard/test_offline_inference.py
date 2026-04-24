@@ -32,6 +32,9 @@ from vllm.assets.image import ImageAsset
 import vllm_ascend  # noqa: F401
 from tests.e2e.conftest import VllmRunner
 
+# ST 框架：标记此文件适用于单卡场景
+pytestmark = pytest.mark.scenario("single_card")
+
 MODELS = [
     "Qwen/Qwen2.5-0.5B-Instruct",
     "Qwen/Qwen3-0.6B-Base",

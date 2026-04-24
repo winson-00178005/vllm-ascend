@@ -1,0 +1,20 @@
+# Runner 标签映射
+# 定义场景/测试套件到 GitHub Actions runner 的映射
+
+# 场景 → Runner 映射
+scenes:
+  single_card: linux-aarch64-a2b3-1
+  multi_card_tp2: linux-aarch64-a3-2
+  multi_card_tp4: linux-aarch64-a3-4
+  multi_card_dp2: linux-aarch64-a3-2
+  ascend_310p: linux-aarch64-310p-1
+
+# 测试套件 → Runner 映射
+suites:
+  e2e-singlecard: linux-aarch64-a2b3-1
+  e2e-singlecard-light: linux-aarch64-a2b3-1
+  e2e-multicard-tp2: linux-aarch64-a3-2
+  e2e-multicard-tp2-light: linux-aarch64-a3-2
+  e2e-multicard-tp4: linux-aarch64-a3-4
+  e2e-multicard-dp2: linux-aarch64-a3-2
+  e2e-310p: linux-aarch64-310p-1

@@ -27,6 +27,9 @@ from unittest.mock import patch
 
 import pytest
 
+# ST 框架：标记此文件适用于多卡 DP2 场景
+pytestmark = pytest.mark.scenario("multi_card_dp2")
+
 MODELS = ["Qwen/Qwen2.5-0.5B-Instruct", "Qwen/Qwen3-30B-A3B"]
 
 

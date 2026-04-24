@@ -1,0 +1,117 @@
+# ST 场景配置定义（Phase 2 扩展版）
+# 每个场景包含：
+#   - description: 场景描述
+#   - env_vars: 需要设置的环境变量
+#   - tp_size: Tensor Parallel 大小
+#   - dp_size: Data Parallel 大小
+#   - hardware: 硬件类型（可选，如 310p）
+#   - features: 启用的特性列表（Phase 2 新增）
+#   - quantization: 量化配置（Phase 2 新增）
+#   - graph_mode: 图模式配置（Phase 2 新增）
+
+scenes:
+  # 基础场景
+  single_card:
+    description: "单卡推理场景"
+    env_vars:
+      ASCEND_RT_VISIBLE_DEVICES: "0"
+    tp_size: 1
+    dp_size: 1
+
+  multi_card_tp2:
+    description: "双卡 TP 并行场景"
+    env_vars:
+      ASCEND_RT_VISIBLE_DEVICES: "0,1"
+    tp_size: 2
+    dp_size: 1
+
+  multi_card_tp4:
+    description: "四卡 TP 并行场景"
+    env_vars:
+      ASCEND_RT_VISIBLE_DEVICES: "0,1,2,3"
+    tp_size: 4
+    dp_size: 1
+
+  multi_card_dp2:
+    description: "双卡 DP 并行场景"
+    env_vars:
+      ASCEND_RT_VISIBLE_DEVICES: "0,1"
+    tp_size: 1
+    dp_size: 2
+
+  ascend_310p:
+    description: "Ascend 310P 硬件场景"
+    env_vars:
+      ASCEND_RT_VISIBLE_DEVICES: "0"
+    tp_size: 1
+    dp_size: 1
+    hardware: "310p"
+
+  # Phase 2: 量化场景
+  single_card_w8a8:
+    description: "单卡 W8A8 量化场景"
+    base_scene: "single_card"  # 继承基础场景配置
+    env_vars:
+      VLLM_TEST_FORCE_LOAD_FORMAT: "dummy_quant"
+    quantization: "w8a8"
+    features:
+      - quantization
+
+  single_card_w4a8:
+    description: "单卡 W4A8 量化场景"
+    base_scene: "single_card"
+    env_vars:
+      VLLM_TEST_FORCE_LOAD_FORMAT: "dummy_quant"
+    quantization: "w4a8"
+    features:
+      - quantization
+
+  multi_card_tp2_w8a8:
+    description: "双卡 W8A8 量化场景"
+    base_scene: "multi_card_tp2"
+    env_vars:
+      VLLM_TEST_FORCE_LOAD_FORMAT: "dummy_quant"
+    quantization: "w8a8"
+    features:
+      - quantization
+
+  # Phase 2: 图模式场景
+  single_card_graph:
+    description: "单卡 ACL 图模式场景"
+    base_scene: "single_card"
+    env_vars:
+      VLLM_ASCEND_ACLGRAPH_ENABLE: "1"
+    graph_mode: "acl"
+    features:
+      - graph_mode
+
+  multi_card_tp2_graph:
+    description: "双卡 ACL 图模式场景"
+    base_scene: "multi_card_tp2"
+    env_vars:
+      VLLM_ASCEND_ACLGRAPH_ENABLE: "1"
+    graph_mode: "acl"
+    features:
+      - graph_mode
+
+  # Phase 2: 调度器场景
+  single_card_ascend_scheduler:
+    description: "单卡 Ascend 调度器场景"
+    base_scene: "single_card"
+    env_vars:
+      VLLM_ASCEND_SCHEDULER_ENABLE: "1"
+    features:
+      - ascend_scheduler
+
+  # Phase 2: 组合场景（量化 + 图模式）
+  single_card_w8a8_graph:
+    description: "单卡 W8A8 量化 + ACL 图模式场景"
+    base_scene: "single_card"
+    env_vars:
+      VLLM_TEST_FORCE_LOAD_FORMAT: "dummy_quant"
+      VLLM_ASCEND_ACLGRAPH_ENABLE: "1"
+    quantization: "w8a8"
+    graph_mode: "acl"
+    features:
+      - quantization
+      - graph_mode

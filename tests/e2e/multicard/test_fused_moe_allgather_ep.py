@@ -29,6 +29,9 @@ from vllm import SamplingParams
 
 from tests.e2e.conftest import VllmRunner
 
+# ST 框架：标记此文件适用于多卡 TP2 场景
+pytestmark = pytest.mark.scenario("multi_card_tp2")
+
 
 @pytest.mark.skipif(
     True,

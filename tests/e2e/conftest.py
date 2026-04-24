@@ -517,3 +517,153 @@ class HfRunner:
 @pytest.fixture(scope="session")
 def hf_runner():
     return HfRunner
+
+
+# ============================================================================
+# ST 测试框架扩展（场景驱动测试）
+# ============================================================================
+
+from .st_config.framework.fixtures import (
+    create_hf_runner_session_fixture,
+    create_vllm_runner_module_fixture,
+    create_vllm_runner_session_fixture,
+)
+from .st_config.framework.model import ModelManager
+from .st_config.framework.scene import SceneManager
+
+
+def pytest_addoption(parser):
+    """注册 ST 框架命令行参数"""
+    parser.addoption(
+        "--scene",
+        default=None,
+        help="指定运行场景 (single_card/multi_card_tp2/multi_card_tp4/ascend_310p)",
+    )
+    parser.addoption(
+        "--model",
+        default=None,
+        help="指定运行模型",
+    )
+    parser.addoption(
+        "--st-ci-no-skip",
+        action="store_true",
+        default=False,
+        help="运行所有模型测试，不跳过",
+    )
+
+
+def pytest_configure(config):
+    """初始化 ST 框架"""
+    cli_scene = config.getoption("--scene")
+    cli_model = config.getoption("--model")
+
+    # 初始化场景管理器和模型管理器
+    scene_mgr = SceneManager(cli_scene=cli_scene)
+    model_mgr = ModelManager()
+
+    config.scene_mgr = scene_mgr
+    config.model_mgr = model_mgr
+    config.cli_model = cli_model
+
+    # 注册自定义 marker
+    config.addinivalue_line(
+        "markers", "scenario(names): 指定用例需要哪些场景"
+    )
+    config.addinivalue_line(
+        "markers", "model(names): 指定用例需要哪些模型"
+    )
+    config.addinivalue_line(
+        "markers", "distributed(num_gpus): 标记分布式测试"
+    )
+
+
+def pytest_generate_tests(metafunc):
+    """动态生成测试参数：场景 × 模型矩阵"""
+    scene_mgr = metafunc.config.scene_mgr
+    model_mgr = metafunc.config.model_mgr
+    cli_model = metafunc.config.cli_model
+
+    # 处理 vllm_runner_module 参数化
+    if "vllm_runner_module" in metafunc.fixturenames:
+        model_marker = metafunc.definition.get_closest_marker("model")
+        if cli_model:
+            models = [cli_model]
+        elif model_marker:
+            models = model_marker.args
+        else:
+            models = model_mgr.get_models_for_scene(scene_mgr.current)
+
+        # 过滤：只保留当前场景支持的模型
+        models = [
+            m for m in models if model_mgr.is_supported(m, scene_mgr.current)
+        ]
+
+        if models:
+            metafunc.parametrize("vllm_runner_module", models, indirect=True)
+
+
+def pytest_collection_modifyitems(config, items):
+    """修改测试集合：过滤不匹配的用例"""
+    scene_mgr = config.scene_mgr
+    model_mgr = config.model_mgr
+
+    for item in items:
+        # 检查场景 marker
+        scenario_marker = item.get_closest_marker("scenario")
+        if scenario_marker:
+            required = set(scenario_marker.args)
+            if scene_mgr.current not in required:
+                item.add_marker(
+                    pytest.mark.skip(
+                        reason=f"场景 '{scene_mgr.current}' 不在 {required}"
+                    )
+                )
+                continue
+
+        # 检查模型 marker
+        model_marker = item.get_closest_marker("model")
+        if model_marker:
+            required = set(model_marker.args)
+            # 获取用例使用的模型（从参数或 fixture）
+            current_model = getattr(item, "_model_name", None)
+            if not current_model:
+                # 尝试从参数化中获取
+                for param_name, param_value in item.callspec.params.items():
+                    if "model" in param_name.lower():
+                        current_model = param_value
+                        break
+
+            if current_model and current_model not in required:
+                item.add_marker(
+                    pytest.mark.skip(
+                        reason=f"模型 '{current_model}' 不在 {required}"
+                    )
+                )
+
+
+@pytest.hookimpl(tryfirst=True)
+def pytest_runtest_setup(item):
+    """用例执行前检查场景/模型匹配"""
+    scene_mgr = item.config.scene_mgr
+    model_mgr = item.config.model_mgr
+
+    # 检查场景 marker
+    scenario_marker = item.get_closest_marker("scenario")
+    if scenario_marker:
+        required = set(scenario_marker.args)
+        if scene_mgr.current not in required:
+            pytest.skip(f"场景 '{scene_mgr.current}' 不在 {required}")
+
+    # 检查模型 marker
+    model_marker = item.get_closest_marker("model")
+    if model_marker:
+        required = set(model_marker.args)
+        current_model = getattr(item, "_model_name", None)
+        if current_model and current_model not in required:
+            pytest.skip(f"模型 '{current_model}' 不在 {required}")
+
+
+# 注入 ST 框架 fixtures
+vllm_runner_session = create_vllm_runner_session_fixture()
+vllm_runner_module = create_vllm_runner_module_fixture()
+hf_runner_session = create_hf_runner_session_fixture()
