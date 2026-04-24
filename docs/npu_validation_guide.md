@@ -34,7 +34,7 @@ echo $VLLM_WORKER_MULTIPROC_METHOD
 ```bash
 cd /path/to/vllm-ascend
 
-python tests/e2e/st/test_framework_validation.py
+python tests/st/test_framework_validation.py
 ```
 
 **预期输出：**
@@ -79,7 +79,7 @@ Total: 15 | Passed: 15 | Failed: 0 | Skipped: 0
 ```bash
 # 测试发现（无需运行）
 export VLLM_TEST_SCENE="SINGLECARD"
-pytest tests/e2e/st/testcases/ --collect-only -q
+pytest tests/st/testcases/ --collect-only -q
 
 # 预期：发现 25+ 个测试用例
 ```
@@ -110,7 +110,7 @@ python -c "from tests.e2e.st.framework.scene_manager import SceneManager; import
 export VLLM_TEST_SCENE="SINGLECARD"
 
 # 应该跳过多卡测试
-pytest tests/e2e/st/testcases/ -v --tb=no 2>&1 | grep -E "PASSED|SKIPPED" | head -30
+pytest tests/st/testcases/ -v --tb=no 2>&1 | grep -E "PASSED|SKIPPED" | head -30
 ```
 
 ### 3.2 2卡场景下测试收集
@@ -119,7 +119,7 @@ pytest tests/e2e/st/testcases/ -v --tb=no 2>&1 | grep -E "PASSED|SKIPPED" | head
 export VLLM_TEST_SCENE="MULTICARD_2Cards"
 
 # 应该跳过4卡测试
-pytest tests/e2e/st/testcases/ -v --tb=no 2>&1 | grep -E "PASSED|SKIPPED" | head -30
+pytest tests/st/testcases/ -v --tb=no 2>&1 | grep -E "PASSED|SKIPPED" | head -30
 ```
 
 ---
@@ -143,7 +143,7 @@ ls -la tests/e2e/models/
 export VLLM_TEST_SCENE="SINGLECARD"
 export VLLM_TEST_MODEL="Qwen/Qwen3-8B"
 
-pytest -sv tests/e2e/st/testcases/test_basic.py::TestBasicInference::test_single_token_generation --tb=short
+pytest -sv tests/st/testcases/test_basic.py::TestBasicInference::test_single_token_generation --tb=short
 ```
 
 **预期：** PASSED
@@ -155,13 +155,13 @@ pytest -sv tests/e2e/st/testcases/test_basic.py::TestBasicInference::test_single
 export VLLM_TEST_SCENE="MULTICARD_2Cards"
 export VLLM_TEST_MODEL="Qwen/Qwen3-30B-A3B"
 
-pytest -sv tests/e2e/st/testcases/test_basic.py::TestBasicInference::test_multicard_2cards_basic --tb=short
+pytest -sv tests/st/testcases/test_basic.py::TestBasicInference::test_multicard_2cards_basic --tb=short
 
 # 4卡测试
 export VLLM_TEST_SCENE="MULTICARD_4Cards"
 export VLLM_TEST_MODEL="Qwen/Qwen3-Next-80B-A3B-Instruct"
 
-pytest -sv tests/e2e/st/testcases/test_basic.py::TestBasicInference::test_multicard_4cards_basic --tb=short
+pytest -sv tests/st/testcases/test_basic.py::TestBasicInference::test_multicard_4cards_basic --tb=short
 ```
 
 ### 4.4 量化测试
@@ -170,7 +170,7 @@ pytest -sv tests/e2e/st/testcases/test_basic.py::TestBasicInference::test_multic
 export VLLM_TEST_SCENE="SINGLECARD"
 export VLLM_TEST_MODEL="vllm-ascend/Qwen3-0.6B-W8A8"
 
-pytest -sv tests/e2e/st/testcases/test_basic.py::TestQuantization::test_w8a8_quantization_singlecard --tb=short
+pytest -sv tests/st/testcases/test_basic.py::TestQuantization::test_w8a8_quantization_singlecard --tb=short
 ```
 
 ---
