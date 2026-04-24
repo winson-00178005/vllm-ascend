@@ -1,0 +1,72 @@
+# Test Registry Configuration - 测试与模型映射配置
+#
+# 定义每个测试支持的模型列表
+# tests: 测试名称 -> 支持的模型
+#
+# models 字段:
+#   - ["all"]: 支持所有模型
+#   - ["qwen-7b", "qwen3-8b"]: 只支持指定模型
+#
+# tags 字段:
+#   - 用于测试分组和过滤
+
+tests:
+  # Dense模型推理测试
+  test_qwen3_inference:
+    models: [qwen-7b, qwen2-7b, qwen3-8b]
+    tags: [inference, dense, single-card]
+    description: Qwen系列Dense模型推理测试
+    
+  test_qwen3_tp2_inference:
+    models: [qwen-7b, qwen2-7b, qwen3-8b]
+    tags: [inference, dense, multi-card, tp2]
+    description: Qwen系列Dense模型TP2推理测试
+    
+  test_qwen3_tp4_inference:
+    models: [qwen3-8b]
+    tags: [inference, dense, multi-card, tp4]
+    description: Qwen3 TP4推理测试
+    
+  test_llama2_inference:
+    models: [llama-7b, llama-13b]
+    tags: [inference, dense, llama]
+    description: LLaMA-2推理测试
+    
+  # MoE模型测试
+  test_qwen3_moe_inference:
+    models: [qwen3-30b-moe]
+    tags: [inference, moe, multi-card]
+    description: Qwen3-MoE推理测试
+    
+  test_deepseek_mtp_correctness:
+    models: [deepseek-67b]
+    tags: [speculative, mtp, multi-card]
+    description: DeepSeek MTP推理正确性测试
+    
+  test_llama_qwen3_eagle_correctness:
+    models: [qwen3-8b]
+    tags: [speculative, eagle, correctness]
+    description: EAGLE推测解码正确性测试
+  
+  # 量化模型测试
+  test_qwen3_w8a8:
+    models: [qwen3-8b]
+    tags: [quantization, w8a8, inference]
+    description: Qwen3 W8A8量化测试
+    
+  # 大模型测试
+  test_qwen72b_tp8:
+    models: [qwen-72b]
+    tags: [inference, large-model, tp8, multi-card]
+    description: Qwen-72B TP8推理测试
+    
+  # 通用测试（支持所有模型）
+  test_model_load:
+    models: [all]
+    tags: [basic, load]
+    description: 模型加载基础测试
+    
+  test_inference_basic:
+    models: [all]
+    tags: [basic, inference]
+    description: 基础推理测试

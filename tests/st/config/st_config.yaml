@@ -1,0 +1,66 @@
+# ST测试模块配置 - 定义源文件依赖和测试目录映射
+#
+# 用途：
+#   - CI 路由：当源文件变化时，确定需要运行哪些 ST 测试
+#   - 测试分组：AST 解析 @npu_test 装饰器，分组测试到 runner
+#
+# 字段：
+#   name: 模块标识
+#   optional: true（匹配时触发）或 false（始终触发）
+#   source_file_dependencies: 触发测试的源文件/目录
+#   tests: 测试目录/文件列表
+
+- name: inference
+  optional: true
+  source_file_dependencies:
+    - vllm_ascend/worker
+    - vllm_ascend/model_executor
+    - tests/st/testcases/inference
+  tests:
+    - tests/st/testcases/inference
+
+- name: models
+  optional: true
+  source_file_dependencies:
+    - vllm_ascend/models
+    - tests/st/testcases/models
+  tests:
+    - tests/st/testcases/models
+
+- name: quantization
+  optional: true
+  source_file_dependencies:
+    - vllm_ascend/quantization
+    - tests/st/testcases/quantization
+  tests:
+    - tests/st/testcases/quantization
+
+- name: distributed
+  optional: true
+  source_file_dependencies:
+    - vllm_ascend/distributed
+    - tests/st/testcases/distributed
+  tests:
+    - tests/st/testcases/distributed
+
+- name: nightly
+  optional: false
+  source_file_dependencies:
+    - tests/st/testcases/nightly
+  tests:
+    - tests/st/testcases/nightly
+
+- name: weekly
+  optional: false
+  source_file_dependencies:
+    - tests/st/testcases/weekly
+  tests:
+    - tests/st/testcases/weekly
+
+- name: framework
+  optional: true
+  source_file_dependencies:
+    - tests/st/framework
+    - tests/st/testcases
+  tests:
+    - tests/st/testcases/test_examples.py

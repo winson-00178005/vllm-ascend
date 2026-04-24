@@ -1,0 +1,72 @@
+# vllm-ascend ST测试框架
+# 
+# 模型配置 - 定义支持的测试模型
+
+version: "1.0"
+models:
+  qwen-7b:
+    name: "Qwen/Qwen-7B"
+    model_path: "Qwen/Qwen-7B"
+    supported_devices: ["310P", "910B"]
+    min_memory: "16GB"
+    max_batch_size: 128
+    tags: ["llm", "chinese"]
+  
+  qwen2-7b:
+    name: "Qwen/Qwen2-7B"
+    model_path: "Qwen/Qwen2-7B"
+    supported_devices: ["310P", "910B"]
+    min_memory: "16GB"
+    max_batch_size: 128
+    tags: ["llm", "chinese"]
+  
+  qwen3-8b:
+    name: "Qwen/Qwen3-8B"
+    model_path: "Qwen/Qwen3-8B"
+    supported_devices: ["310P", "910B"]
+    min_memory: "16GB"
+    max_batch_size: 128
+    tags: ["llm", "chinese"]
+  
+  qwen3-30b-moe:
+    name: "Qwen/Qwen3-30B-A3B"
+    model_path: "Qwen/Qwen3-30B-A3B"
+    supported_devices: ["310P", "910B"]
+    min_memory: "64GB"
+    max_batch_size: 32
+    requires_multi_card: true
+    tags: ["llm", "chinese", "moe"]
+  
+  qwen-72b:
+    name: "Qwen/Qwen2.5-72B"
+    model_path: "Qwen/Qwen2.5-72B"
+    supported_devices: ["310P", "910B"]
+    min_memory: "128GB"
+    max_batch_size: 16
+    requires_multi_card: true
+    tags: ["llm", "chinese", "large"]
+  
+  llama-7b:
+    name: "meta-llama/Llama-2-7b-hf"
+    model_path: "meta-llama/Llama-2-7b-hf"
+    supported_devices: ["310P"]
+    min_memory: "16GB"
+    max_batch_size: 128
+    tags: ["llm"]
+  
+  llama-13b:
+    name: "meta-llama/Llama-2-13b-hf"
+    model_path: "meta-llama/Llama-2-13b-hf"
+    supported_devices: ["310P"]
+    min_memory: "32GB"
+    max_batch_size: 64
+    tags: ["llm"]
+  
+  deepseek-67b:
+    name: "deepseek-ai/deepseek-llm-67b-chat"
+    model_path: "deepseek-ai/deepseek-llm-67b-chat"
+    supported_devices: ["310P", "910B"]
+    min_memory: "128GB"
+    max_batch_size: 16
+    requires_multi_card: true
+    tags: ["llm", "large"]

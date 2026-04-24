@@ -1,0 +1,16 @@
+# vllm-ascend ST测试框架
+# 
+# 环境配置 - 定义测试环境的全局配置
+
+version: "1.0"
+environments:
+  device_detection:
+    auto_detect: true
+    fallback_device: "310P"
+  
+  resource_limits:
+    max_memory_per_test: "4GB"
+    max_time_per_test: "3600s"
+  
+  setup_timeout: 600
+  teardown_timeout: 300

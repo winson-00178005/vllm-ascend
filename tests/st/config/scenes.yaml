@@ -1,0 +1,73 @@
+# vllm-ascend ST测试框架
+# 
+# 场景配置 - 定义支持的测试场景
+
+version: "1.0"
+scenes:
+  # 310P场景
+  SINGLE_CARD_310P:
+    description: "310P单卡环境"
+    device_type: "310P"
+    card_count: 1
+    models: ["qwen-7b", "qwen2-7b", "llama-7b"]
+    tags: ["single", "310p"]
+  
+  MULTI_CARD_310P_2:
+    description: "310P 2卡环境"
+    device_type: "310P"
+    card_count: 2
+    models: ["qwen3-30b-moe", "llama-13b"]
+    tags: ["multi", "310p"]
+  
+  MULTI_CARD_310P_4:
+    description: "310P 4卡环境"
+    device_type: "310P"
+    card_count: 4
+    models: ["qwen-72b", "deepseek-67b"]
+    tags: ["multi", "310p"]
+  
+  # 910B场景
+  SINGLE_CARD_910B:
+    description: "910B单卡环境"
+    device_type: "910B"
+    card_count: 1
+    models: ["qwen-7b", "qwen2-7b"]
+    tags: ["single", "910b"]
+  
+  MULTI_CARD_910B_2:
+    description: "910B 2卡环境"
+    device_type: "910B"
+    card_count: 2
+    models: ["qwen3-30b-moe", "llama-13b"]
+    tags: ["multi", "910b"]
+  
+  # 分布式场景
+  SINGLE_NODE_MULTI_CARD:
+    description: "单机8卡场景"
+    device_type: "310P"
+    card_count: 8
+    models: ["qwen-72b", "deepseek-67b"]
+    tags: ["single_machine", "multi_card"]
+  
+  MULTI_NODE_MULTI_CARD:
+    description: "多机多卡分布式场景"
+    device_type: "310P"
+    card_count: 16
+    node_count: 2
+    models: ["qwen-72b", "deepseek-67b"]
+    tags: ["multi_machine", "distributed"]
+  
+  # Nightly/Weekly场景
+  NIGHTLY_SINGLE_NODE:
+    description: "每日单机测试场景"
+    device_type: "310P"
+    card_count: 8
+    models: ["all"]
+    tags: ["nightly", "single_node"]
+  
+  WEEKLY_SINGLE_NODE:
+    description: "每周单机测试场景"
+    device_type: "310P"
+    card_count: 8
+    models: ["qwen-72b"]
+    tags: ["weekly", "single_node"]
