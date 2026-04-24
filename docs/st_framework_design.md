@@ -941,21 +941,29 @@ jobs:
 ```
 tests/e2e/
 ├── st/                              # ST 测试框架根目录
-│   ├── __init__.py
+│   ├── __init__.py                  # 框架导出
+│   ├── conftest.py                  # pytest 配置
 │   ├── config/
 │   │   ├── __init__.py
 │   │   ├── scene.yaml               # 场景配置
 │   │   └── models.yaml              # 模型列表配置
 │   ├── framework/
-│   │   ├── __init__.py
+│   │   ├── __init__.py              # 组件导出
 │   │   ├── scene_manager.py         # 场景管理器
-│   │   ├── model_config.py         # 模型配置加载器
-│   │   ├── decorators.py           # 场景/模型筛选装饰器
+│   │   ├── model_config.py          # 模型配置加载器
+│   │   ├── decorators.py            # 场景/模型筛选装饰器
 │   │   ├── fixtures.py              # pytest fixtures
-│   │   └── compat.py               # 兼容层 (关键!)
+│   │   ├── compat.py                # 兼容层
+│   │   └── extensions.py            # 扩展功能 (基于 PR #8557)
 │   └── testcases/
 │       ├── __init__.py
-│       └── ...                      # 迁移/新建的测试
+│       ├── test_basic.py           # 基础测试示例
+│       ├── test_310p.py            # 310P 测试
+│       ├── test_multicard.py       # 多卡测试
+│       ├── test_extensions.py      # 扩展功能示例
+│       └── multicard/              # 多卡测试子目录
+│           ├── ...
+│           └── spec_decode/
 │
 ├── conftest.py                      # 现有配置 (保留)
 ├── singlecard/                      # 现有测试 (可逐步迁移)
@@ -965,7 +973,67 @@ tests/e2e/
 
 ---
 
-## 十、后续扩展建议
+## 十、扩展功能 (基于 PR #8557)
+
+### 10.1 版本跳过机制
+
+```python
+from tests.e2e.st.framework.extensions import vllm_version_is
+
+@pytest.mark.skipif(vllm_version_is("0.19.0"), reason="Not supported")
+def test_version_specific_feature():
+    ...
+```
+
+### 10.2 性能监控
+
+```python
+from tests.e2e.st.framework.extensions import PerformanceMonitor
+
+def test_performance(performance_monitor):
+    with performance_monitor.start("test"):
+        outputs = runner.generate(prompts, max_tokens)
+    performance_monitor.assert_performance("test", min_throughput=10.0)
+```
+
+### 10.3 精度对比
+
+```python
+from tests.e2e.st.framework.extensions import PrecisionComparator
+
+def test_precision(precision_comparator):
+    cpu_out = cpu_runner.generate(prompt)
+    npu_out = npu_runner.generate(prompt)
+    is_close = precision_comparator.compare(cpu_out, npu_out)
+```
+
+### 10.4 硬件要求
+
+```python
+from tests.e2e.st.framework.extensions import require_hardware, require_npu_device
+
+@require_hardware("Ascend910B")
+def test_910b_only():
+    ...
+
+@require_npu_device(0)
+def test_single_npu():
+    ...
+```
+
+### 10.5 测试报告
+
+```python
+from tests.e2e.st.framework.extensions import TestReport
+
+def test_with_report(test_report):
+    test_report.add_test("case1", "PASSED", duration=1.5)
+    test_report.save("report.json")
+```
+
+---
+
+## 十一、后续扩展建议
 
 1. **动态场景切换**：支持在同一个测试会话中动态切换场景
 2. **覆盖率收集**：集成 coverage.py 自动收集测试覆盖率
