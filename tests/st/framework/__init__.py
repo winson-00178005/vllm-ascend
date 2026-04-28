@@ -19,6 +19,27 @@ from tests.st.framework.extensions import (
     TestReport,
 )
 
+# Platform support (based on upstream vLLM tests/utils.py)
+from tests.st.framework.platform import (
+    NPUPlatform,
+    NPUResourceGuard,
+    wait_for_npu_memory_to_clear,
+    npu_memory_required,
+    npu_device_required,
+    large_npu_test,
+    single_npu_only,
+    multi_npu_only,
+    npu_tier_mark,
+)
+
+# Remote inference support
+from tests.st.framework.remote import (
+    RemoteVLLMServer,
+    VllmRunnerProcess,
+    MultiNodeRunner,
+    CompareSettings,
+)
+
 __all__ = [
     # Core
     "SceneManager",
@@ -39,4 +60,19 @@ __all__ = [
     "require_hardware",
     "require_npu_device",
     "TestReport",
+    # Platform
+    "NPUPlatform",
+    "NPUResourceGuard",
+    "wait_for_npu_memory_to_clear",
+    "npu_memory_required",
+    "npu_device_required",
+    "large_npu_test",
+    "single_npu_only",
+    "multi_npu_only",
+    "npu_tier_mark",
+    # Remote
+    "RemoteVLLMServer",
+    "VllmRunnerProcess",
+    "MultiNodeRunner",
+    "CompareSettings",
 ]
