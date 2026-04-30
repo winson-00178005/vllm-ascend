@@ -97,17 +97,17 @@
 
 ## 6. Distributed模块集成测试（插件内部协作 + 双模式 + NPU真实测试）
 
-- [ ] 6.1 创建tests/st/distributed/目录和conftest.py（模块级fixtures、execution_environment fixture）
-- [ ] 6.2 使用Mock工厂函数创建分布式环境Mock（create_mock_distribution_env参考test_fused_ops.py模式）
-- [ ] 6.3 实现NPUCommunicator通信集成测试（插件内部协作、参数化world_size、Mock验证all_reduce调用）
-- [ ] 6.4 验证NPUCommunicator与vllm分布式接口兼容（接口兼容性测试）
-- [ ] 6.5 实现Tensor Parallel集成测试（权重分片、STRunner管理分布式资源、异常验证）
-- [ ] 6.6 实现Expert Parallel集成测试（参数化num_experts、Mock工厂函数复用）
-- [ ] 6.7 实现Distributed与KV Connector集成测试（多层Mock协作、Docstring强制）
-- [ ] 6.8 参数化双模式测试（exec_mode=["cpu_mock", "npu_real"]）
-- [ ] 6.9 实现NPU真实模式HCCL分布式通信测试（验证真实all_reduce、all_gather）
-- [ ] 6.10 吸纳tests/ut/ops/test_fused_ops.py优秀模式（Mock工厂函数、多层@patch装饰器）
-- [ ] 6.11 标记双模式测试用例（@pytest.mark.cpu_mock、@pytest.mark.npu_real）
+- [x] 6.1 创建tests/st/distributed/目录和conftest.py（模块级fixtures、execution_environment fixture）
+- [x] 6.2 使用Mock工厂函数创建分布式环境Mock（create_mock_distribution_env参考test_fused_ops.py模式）
+- [x] 6.3 实现NPUCommunicator通信集成测试（插件内部协作、参数化world_size、Mock验证all_reduce调用）
+- [x] 6.4 验证NPUCommunicator与vllm分布式接口兼容（接口兼容性测试）
+- [x] 6.5 实现Tensor Parallel集成测试（权重分片、STRunner管理分布式资源、异常验证）
+- [x] 6.6 实现Expert Parallel集成测试（参数化num_experts、Mock工厂函数复用）
+- [x] 6.7 实现Distributed与KV Connector集成测试（多层Mock协作、Docstring强制）
+- [x] 6.8 参数化双模式测试（exec_mode=["cpu_mock", "npu_real"]）
+- [x] 6.9 实现NPU真实模式HCCL分布式通信测试（验证真实all_reduce、all_gather）
+- [x] 6.10 吸纳tests/ut/ops/test_fused_ops.py优秀模式（Mock工厂函数、多层@patch装饰器）
+- [x] 6.11 标记双模式测试用例（@pytest.mark.cpu_mock、@pytest.mark.npu_real）
 
 ## 7. Sample模块集成测试（插件内部协作 + 双模式）
 
