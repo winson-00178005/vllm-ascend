@@ -111,17 +111,17 @@
 
 ## 7. Sample模块集成测试（插件内部协作 + 双模式）
 
-- [ ] 7.1 创建tests/st/sample/目录和conftest.py（模块级fixtures、execution_environment fixture）
-- [ ] 7.2 定义全局常量（参考test_rejection_sampler.py的PLACEHOLDER_TOKEN_ID模式）
-- [ ] 7.3 实现AscendSampler与AscendRejectionSampler集成测试（插件内部协作、参数化验证场景）
-- [ ] 7.4 验证AscendSampler与vllm.Sampler接口兼容（接口兼容性测试）
-- [ ] 7.5 实现AscendRejectionSampler不同验证场景集成测试（全接受、全拒绝、部分接受、详细Docstring）
-- [ ] 7.6 实现AscendSampler与Temperature集成测试（参数化temperature值、Mock验证采样调用）
-- [ ] 7.7 实现AscendSampler与Batch集成测试（参数化batch_size、setUp/tearDown管理采样数据）
-- [ ] 7.8 实现Sample模块与Worker集成测试（插件内部协作、异常场景验证、错误传递）
-- [ ] 7.9 参数化双模式测试（exec_mode=["cpu_mock", "npu_real"]）
-- [ ] 7.10 吸纳tests/ut/sample/test_rejection_sampler.py优秀模式（全局常量、详细Docstring、异常验证）
-- [ ] 7.11 标记双模式测试用例（@pytest.mark.cpu_mock、@pytest.mark.npu_real）
+- [x] 7.1 创建tests/st/sample/目录和conftest.py（模块级fixtures、execution_environment fixture）
+- [x] 7.2 定义全局常量（参考test_rejection_sampler.py的PLACEHOLDER_TOKEN_ID模式）
+- [x] 7.3 实现AscendSampler与AscendRejectionSampler集成测试（插件内部协作、参数化验证场景）
+- [x] 7.4 验证AscendSampler与vllm.Sampler接口兼容（接口兼容性测试）
+- [x] 7.5 实现AscendRejectionSampler不同验证场景集成测试（全接受、全拒绝、部分接受、详细Docstring）
+- [x] 7.6 实现AscendSampler与Temperature集成测试（参数化temperature值、Mock验证采样调用）
+- [x] 7.7 实现AscendSampler与Batch集成测试（参数化batch_size、setUp/tearDown管理采样数据）
+- [x] 7.8 实现Sample模块与Worker集成测试（插件内部协作、异常场景验证、错误传递）
+- [x] 7.9 参数化双模式测试（exec_mode=["cpu_mock", "npu_real"]）
+- [x] 7.10 吸纳tests/ut/sample/test_rejection_sampler.py优秀模式（全局常量、详细Docstring、异常验证）
+- [x] 7.11 标记双模式测试用例（@pytest.mark.cpu_mock、@pytest.mark.npu_real）
 
 ## 8. CI集成与测试优化（双模式CI配置）
 
