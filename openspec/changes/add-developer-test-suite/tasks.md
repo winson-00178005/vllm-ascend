@@ -43,9 +43,9 @@
 - [x] 2.12 实现NPUWorker与NpuInputBatch集成测试（数据流、格式转换、插件内部协作）
 - [x] 2.13 实现NPUWorker多批次并发处理集成测试（并发调度、资源冲突处理）
 - [x] 2.14 实现NPUWorker与MTProposer集成测试（初始化、推测token生成）
-- [ ] 2.15 吸纳现有UT优秀模式（参考tests/ut/worker/test_worker_v1.py的设计风格）
-- [ ] 2.16 不测试vllm.Worker核心逻辑（明确ST测试聚焦插件内部协作，文档说明职责边界）
-- [ ] 2.17 标记双模式测试用例（@pytest.mark.cpu_mock、@pytest.mark.npu_real）
+- [x] 2.15 吸纳现有UT优秀模式（参考tests/ut/worker/test_worker_v1.py的设计风格）
+- [x] 2.16 不测试vllm.Worker核心逻辑（明确ST测试聚焦插件内部协作，文档说明职责边界）
+- [x] 2.17 标记双模式测试用例（@pytest.mark.cpu_mock、@pytest.mark.npu_real）
 
 ## 3. Scheduler模块集成测试（插件内部协作 + 双模式）
 
