@@ -41,7 +41,7 @@
 - [x] 2.10 实现异常场景测试（with assertRaises验证错误传递、assert "error_msg" in str(cm.exception))
 - [x] 2.11 使用Mock验证策略（verify_mock_calls验证调用次数和参数）
 - [x] 2.12 实现NPUWorker与NpuInputBatch集成测试（数据流、格式转换、插件内部协作）
-- [ ] 2.13 实现NPUWorker多批次并发处理集成测试（并发调度、资源冲突处理）
+- [x] 2.13 实现NPUWorker多批次并发处理集成测试（并发调度、资源冲突处理）
 - [ ] 2.14 实现NPUWorker与MTProposer集成测试（初始化、推测token生成）
 - [ ] 2.15 吸纳现有UT优秀模式（参考tests/ut/worker/test_worker_v1.py的设计风格）
 - [ ] 2.16 不测试vllm.Worker核心逻辑（明确ST测试聚焦插件内部协作，文档说明职责边界）
