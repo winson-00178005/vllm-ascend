@@ -5,6 +5,9 @@ openai
 pytest >= 6.0
 pytest-asyncio
 pytest-mock
+pytest-cov
+pytest-xdist
+pytest-rerunfailures
 lm-eval==0.4.8
 types-jsonschema
 xgrammar
