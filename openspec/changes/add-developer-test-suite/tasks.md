@@ -1,7 +1,7 @@
 ## 1. ST测试框架基础设施搭建
 
 - [x] 1.1 创建tests/st/目录结构（包括base.py、conftest.py、utils/、fixtures/、runner_factory.py、performance/、precision/、integration/）
-- [ ] 1.2 实现双基类设计（TestSTBase继承unittest.TestCase + PytestSTBase使用fixture autouse）
+- [x] 1.2 实现双基类设计（TestSTBase继承unittest.TestCase + PytestSTBase使用fixture autouse）
 - [ ] 1.3 实现setUp/tearDown资源管理（setUp初始化Mock环境、tearDown清理Mock状态）
 - [ ] 1.4 实现层级化fixtures（全局conftest.py使用session scope、模块级conftest.py使用参数化fixture）
 - [ ] 1.5 实现pytest_addoption命令行参数（参考tests/e2e/models/conftest.py模式）
