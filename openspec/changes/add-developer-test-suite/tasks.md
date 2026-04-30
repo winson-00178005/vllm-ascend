@@ -36,7 +36,7 @@
 - [x] 2.5 测试NPUWorker替换逻辑正确性（初始化ModelRunner、调度协作、接口兼容）
 - [x] 2.6 参数化多维度测试（batch_size=[1,16,32]、scenario=["normal","error"]、dtype=["float16","bfloat16"])
 - [x] 2.7 参数化双模式测试（exec_mode=["cpu_mock", "npu_real"]、验证不同模式执行结果）
-- [ ] 2.8 使用execution_environment fixture动态切换CPU Mock和NPU真实环境
+- [x] 2.8 使用execution_environment fixture动态切换CPU Mock和NPU真实环境
 - [ ] 2.9 强制添加Docstring（包含"验证"、"场景"、"预期结果"、"执行模式"四个部分）
 - [ ] 2.10 实现异常场景测试（with assertRaises验证错误传递、assert "error_msg" in str(cm.exception))
 - [ ] 2.11 使用Mock验证策略（verify_mock_calls验证调用次数和参数）

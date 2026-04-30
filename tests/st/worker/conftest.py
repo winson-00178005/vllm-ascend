@@ -16,6 +16,7 @@
 import pytest
 
 from tests.st.utils.config_factory import create_vllm_config
+from tests.st.utils.env_detector import has_torch_npu
 from tests.st.utils.mock_utils import create_mock_worker, create_mock_model_runner
 
 
@@ -65,3 +66,34 @@ def mock_worker():
 def mock_model_runner():
     """Mock ModelRunner fixture"""
     return create_mock_model_runner()
+
+
+@pytest.fixture
+def execution_environment(st_environment, request):
+    """Execution environment fixture for dynamic switching.
+    
+    Dynamically switch between CPU Mock and NPU Real environments
+    based on test parameters and st_environment.
+    
+    Args:
+        st_environment: Session scope environment fixture
+        request: pytest request object
+        
+    Yields:
+        Environment instance (CPUMockEnvironment or NPURealEnvironment)
+    """
+    return st_environment
+
+
+@pytest.fixture(params=["cpu_mock", "npu_real"])
+def exec_mode_param(request):
+    """Parameterized execution mode fixture.
+    
+    Provides parameterized execution mode for dual-mode tests.
+    """
+    mode = request.param
+    if mode == "npu_real":
+        from tests.st.utils.env_detector import has_torch_npu
+        if not has_torch_npu():
+            pytest.skip("NPU not available, skipping npu_real test")
+    return mode

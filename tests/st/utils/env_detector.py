@@ -19,6 +19,19 @@ Auto-detect execution environment and choose appropriate mode.
 """
 
 
+def has_torch_npu() -> bool:
+    """Check if torch_npu is available.
+    
+    Returns:
+        True if torch_npu is available, False otherwise
+    """
+    try:
+        import torch_npu
+        return True
+    except ImportError:
+        return False
+
+
 def detect_execution_environment() -> str:
     """Detect environment and return available execution mode.
 
