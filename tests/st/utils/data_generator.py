@@ -146,3 +146,8 @@ def get_test_seq_lengths() -> list:
         List of sequence lengths for parameterization
     """
     return [128, 512, 1024]
+
+
+DEFAULT_BATCH_SIZES = get_test_batch_sizes()
+DEFAULT_DTYPES = get_test_dtypes()
+DEFAULT_SEQ_LENGTHS = get_test_seq_lengths()
