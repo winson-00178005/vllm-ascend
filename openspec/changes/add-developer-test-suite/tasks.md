@@ -128,10 +128,10 @@
 - [x] 8.1 编写ST测试运行脚本（run_st_tests.sh：支持单模块和全量执行、双模式执行）
 - [x] 8.2 配置pytest-xdist并行执行（多进程并行，缩短执行时间≤5分钟）
 - [x] 8.3 配置覆盖率报告生成（pytest-cov，生成XML和HTML报告）
-- [ ] 8.4 集成ST测试到CI workflow（GitHub Actions：添加ST测试job）
-- [ ] 8.5 配置双模式CI job（Job1 CPU Mock快速门禁、Job2 NPU真实深度测试可选）
-- [ ] 8.6 添加插件接口兼容性验证到CI（vllm版本升级时运行兼容性测试）
-- [ ] 8.7 添加环境检测机制到CI（检测vllm可用性、torch_npu可用性、灵活切换配置策略）
+- [x] 8.4 集成ST测试到CI workflow（GitHub Actions：添加ST测试job）
+- [x] 8.5 配置双模式CI job（Job1 CPU Mock快速门禁、Job2 NPU真实深度测试可选）
+- [x] 8.6 添加插件接口兼容性验证到CI（vllm版本升级时运行兼容性测试）
+- [x] 8.7 添加环境检测机制到CI（检测vllm可用性、torch_npu可用性、灵活切换配置策略）
 - [x] 8.8 优化ST测试执行时间（选择性Mock、预生成数据缓存、session scope fixture共享）
 - [x] 8.9 配置CI门禁阈值（执行时间≤5分钟、覆盖率目标设置、NPU测试可选）
 - [x] 8.10 编写ST测试框架文档（README.md：框架说明、STRunner使用指南、插件测试职责说明、双模式使用指南）
@@ -201,132 +201,132 @@
 
 ## 13. Environment-Model-TestCase三层解耦基础设施
 
-- [ ] 13.1 设计三层解耦架构（Environment Layer、Model Layer、Test Case Layer）
-- [ ] 13.2 创建tests/st/utils/model_pool.py（ModelPool模型缓存池类）
-- [ ] 13.3 实现ModelPool.get_or_create方法（获取或创建模型实例，缓存策略）
-- [ ] 13.4 实现ModelPool._create_cache_key方法（考虑模型名、量化、分布式配置）
-- [ ] 13.5 实现ModelPool._load_model方法（CPU Mock创建Mock模型、NPU真实加载真实模型）
-- [ ] 13.6 实现ModelPool.release方法（手动释放指定模型）
-- [ ] 13.7 实现ModelPool.clear方法（清空所有模型，模块结束时清理）
-- [ ] 13.8 实现ModelPool.get_stats方法（统计模型数量、缓存命中率）
-- [ ] 13.9 创建tests/st/utils/config_loader.py（ConfigLoader配置管理器类）
-- [ ] 13.10 实现ConfigLoader.load方法（加载YAML配置文件）
-- [ ] 13.11 实现ConfigLoader.load_model_config方法（加载特定模型配置）
-- [ ] 13.12 实现ConfigLoader.load_test_config方法（加载特定测试配置）
-- [ ] 13.13 实现配置缓存机制（避免重复读取配置文件）
-- [ ] 13.14 创建tests/st/configs/目录（配置文件目录）
-- [ ] 13.15 创建tests/st/configs/default.yaml（默认配置文件）
-- [ ] 13.16 定义default配置节（exec_mode、timeout）
-- [ ] 13.17 定义models配置节（default_model、Qwen-0.5B、Qwen-7B等模型配置）
-- [ ] 13.18 定义tests配置节（default_test、worker_test、attention_test等测试配置）
-- [ ] 13.19 创建tests/st/configs/ci_fast.yaml（CI快速测试配置）
-- [ ] 13.20 创建tests/st/configs/npu_deep.yaml（NPU深度测试配置）
-- [ ] 13.21 实现pytest_addoption命令行参数（--config-file、--model、--test-config）
-- [ ] 13.22 实现config_loader fixture（scope="session"，配置管理器）
-- [ ] 13.23 实现model_config fixture（scope="module"，从配置加载模型配置）
-- [ ] 13.24 实现test_config fixture（scope="function"，从配置加载测试参数）
-- [ ] 13.25 实现st_environment fixture（scope="session"，Layer 1环境层）
-- [ ] 13.26 实现model_pool fixture（scope="module"，Layer 2模型层）
-- [ ] 13.27 实现cached_model fixture（scope="module"，从ModelPool获取模型）
-- [ ] 13.28 实现test_runner fixture（scope="function"，Layer 3测试用例层）
-- [ ] 13.29 重构现有Worker测试使用ModelPool（避免重复模型加载）
-- [ ] 13.30 重构现有Attention测试使用ModelPool（避免重复模型加载）
-- [ ] 13.31 重构现有Quantization测试使用ModelPool（避免重复模型加载）
-- [ ] 13.32 验证三层解耦架构正确性（模型不重复加载、测试独立性）
-- [ ] 13.33 验证ModelPool缓存命中率（统计缓存效果）
-- [ ] 13.34 编写三层解耦架构使用文档（说明如何使用ModelPool和ConfigLoader）
-- [ ] 13.35 编写配置文件编写指南（YAML配置文件格式说明）
+- [x] 13.1 设计三层解耦架构（Environment Layer、Model Layer、Test Case Layer）
+- [x] 13.2 创建tests/st/utils/model_pool.py（ModelPool模型缓存池类）
+- [x] 13.3 实现ModelPool.get_or_create方法（获取或创建模型实例，缓存策略）
+- [x] 13.4 实现ModelPool._create_cache_key方法（考虑模型名、量化、分布式配置）
+- [x] 13.5 实现ModelPool._load_model方法（CPU Mock创建Mock模型、NPU真实加载真实模型）
+- [x] 13.6 实现ModelPool.release方法（手动释放指定模型）
+- [x] 13.7 实现ModelPool.clear方法（清空所有模型，模块结束时清理）
+- [x] 13.8 实现ModelPool.get_stats方法（统计模型数量、缓存命中率）
+- [x] 13.9 创建tests/st/utils/config_loader.py（ConfigLoader配置管理器类）
+- [x] 13.10 实现ConfigLoader.load方法（加载YAML配置文件）
+- [x] 13.11 实现ConfigLoader.load_model_config方法（加载特定模型配置）
+- [x] 13.12 实现ConfigLoader.load_test_config方法（加载特定测试配置）
+- [x] 13.13 实现配置缓存机制（避免重复读取配置文件）
+- [x] 13.14 创建tests/st/configs/目录（配置文件目录）
+- [x] 13.15 创建tests/st/configs/default.yaml（默认配置文件）
+- [x] 13.16 定义default配置节（exec_mode、timeout）
+- [x] 13.17 定义models配置节（default_model、Qwen-0.5B、Qwen-7B等模型配置）
+- [x] 13.18 定义tests配置节（default_test、worker_test、attention_test等测试配置）
+- [x] 13.19 创建tests/st/configs/ci_fast.yaml（CI快速测试配置）
+- [x] 13.20 创建tests/st/configs/npu_deep.yaml（NPU深度测试配置）
+- [x] 13.21 实现pytest_addoption命令行参数（--config-file、--model、--test-config）
+- [x] 13.22 实现config_loader fixture（scope="session"，配置管理器）
+- [x] 13.23 实现model_config fixture（scope="module"，从配置加载模型配置）
+- [x] 13.24 实现test_config fixture（scope="function"，从配置加载测试参数）
+- [x] 13.25 实现st_environment fixture（scope="session"，Layer 1环境层）
+- [x] 13.26 实现model_pool fixture（scope="module"，Layer 2模型层）
+- [x] 13.27 实现cached_model fixture（scope="module"，从ModelPool获取模型）
+- [x] 13.28 实现test_runner fixture（scope="function"，Layer 3测试用例层）
+- [x] 13.29 重构现有Worker测试使用ModelPool（避免重复模型加载）
+- [x] 13.30 重构现有Attention测试使用ModelPool（避免重复模型加载）
+- [x] 13.31 重构现有Quantization测试使用ModelPool（避免重复模型加载）
+- [x] 13.32 验证三层解耦架构正确性（模型不重复加载、测试独立性）
+- [x] 13.33 验证ModelPool缓存命中率（统计缓存效果）
+- [x] 13.34 编写三层解耦架构使用文档（说明如何使用ModelPool和ConfigLoader）
+- [x] 13.35 编写配置文件编写指南（YAML配置文件格式说明）
 
 ## 14. Mock模型创建策略（配合ModelPool）
 
-- [ ] 14.1 实现create_mock_model函数（CPU Mock模式创建Mock模型）
-- [ ] 14.2 实现Mock模型结构（模拟真实模型的forward、generate等方法）
-- [ ] 14.3 实现Mock模型spec限制（确保Mock模型接口与真实模型一致）
-- [ ] 14.4 实现Mock模型参数化（支持不同batch_size、seq_len等）
-- [ ] 14.5 实现Mock模型缓存策略（同一配置共享Mock模型实例）
-- [ ] 14.6 验证Mock模型与真实模型接口兼容性（接口一致性测试）
+- [x] 14.1 实现create_mock_model函数（CPU Mock模式创建Mock模型）
+- [x] 14.2 实现Mock模型结构（模拟真实模型的forward、generate等方法）
+- [x] 14.3 实现Mock模型spec限制（确保Mock模型接口与真实模型一致）
+- [x] 14.4 实现Mock模型参数化（支持不同batch_size、seq_len等）
+- [x] 14.5 实现Mock模型缓存策略（同一配置共享Mock模型实例）
+- [x] 14.6 验证Mock模型与真实模型接口兼容性（接口一致性测试）
 
 ## 15. 配置驱动的测试用例改造
 
-- [ ] 15.1 改造Worker测试使用配置驱动（从配置加载batch_size、scenario等）
-- [ ] 15.2 改造Scheduler测试使用配置驱动（从配置加载调度参数）
-- [ ] 15.3 改造Attention测试使用配置驱动（从配置加载seq_len、attention_state）
-- [ ] 15.4 改造Quantization测试使用配置驱动（从配置加载量化参数）
-- [ ] 15.5 改造Distributed测试使用配置驱动（从配置加载world_size、tp_size）
-- [ ] 15.6 改造Sample测试使用配置驱动（从配置加载采样参数）
-- [ ] 15.7 验证配置驱动测试正确性（配置参数正确传递到测试用例）
-- [ ] 15.8 验证配置文件变更生效（修改配置文件，测试参数变更）
+- [x] 15.1 改造Worker测试使用配置驱动（从配置加载batch_size、scenario等）
+- [x] 15.2 改造Scheduler测试使用配置驱动（从配置加载调度参数）
+- [x] 15.3 改造Attention测试使用配置驱动（从配置加载seq_len、attention_state）
+- [x] 15.4 改造Quantization测试使用配置驱动（从配置加载量化参数）
+- [x] 15.5 改造Distributed测试使用配置驱动（从配置加载world_size、tp_size）
+- [x] 15.6 改造Sample测试使用配置驱动（从配置加载采样参数）
+- [x] 15.7 验证配置驱动测试正确性（配置参数正确传递到测试用例）
+- [x] 15.8 验证配置文件变更生效（修改配置文件，测试参数变更）
 
 ## 16. 精度/性能看护能力（长期优化，5周）
 
-- [ ] 16.1 实现精度看护框架（CPU Mock vs NPU真实对比）
-- [ ] 16.2 实现精度误差阈值定义（不同算子类型定义不同rtol、atol）
-- [ ] 16.3 实现精度误差数据收集（JSON格式存储精度误差数据）
-- [ ] 16.4 实现精度误差告警机制（精度超出阈值时告警）
-- [ ] 16.5 实现性能看护框架（执行时间、内存、吞吐量测量）
-- [ ] 16.6 实现性能基准数据管理（performance_baseline.json格式定义）
-- [ ] 16.7 实现性能数据收集和分析（JSON格式存储性能数据）
-- [ ] 16.8 实现性能报告自动生成（可视化性能数据、性能对比报告）
-- [ ] 16.9 实现性能基准更新机制（模型升级、硬件升级时更新基准）
-- [ ] 16.10 标记精度测试用例（@pytest.mark.npu_precision）
-- [ ] 16.11 标记性能测试用例（@pytest.mark.npu_performance）
-- [ ] 16.12 配置精度阈值告警机制（精度超出阈值时告警）
-- [ ] 16.13 配置性能退化告警机制（性能超出基准时告警）
+- [x] 16.1 实现精度看护框架（CPU Mock vs NPU真实对比）
+- [x] 16.2 实现精度误差阈值定义（不同算子类型定义不同rtol、atol）
+- [x] 16.3 实现精度误差数据收集（JSON格式存储精度误差数据）
+- [x] 16.4 实现精度误差告警机制（精度超出阈值时告警）
+- [x] 16.5 实现性能看护框架（执行时间、内存、吞吐量测量）
+- [x] 16.6 实现性能基准数据管理（performance_baseline.json格式定义）
+- [x] 16.7 实现性能数据收集和分析（JSON格式存储性能数据）
+- [x] 16.8 实现性能报告自动生成（可视化性能数据、性能对比报告）
+- [x] 16.9 实现性能基准更新机制（模型升级、硬件升级时更新基准）
+- [x] 16.10 标记精度测试用例（@pytest.mark.npu_precision）
+- [x] 16.11 标记性能测试用例（@pytest.mark.npu_performance）
+- [x] 16.12 配置精度阈值告警机制（精度超出阈值时告警）
+- [x] 16.13 配置性能退化告警机制（性能超出基准时告警）
 
 ## 17. 覆盖率数据看护与可视化展示能力（短期优化，5天）
 
-- [ ] 17.1 创建.coveragerc配置文件（定义source、omit、exclude_lines等）
-- [ ] 17.2 配置覆盖率排除规则（排除tests/*、__pycache__/*等）
-- [ ] 17.3 配置覆盖率报告输出路径（htmlcov、coverage.xml、coverage.json）
-- [ ] 17.4 配置覆盖率门禁阈值（fail_under=80）
-- [ ] 17.5 配置覆盖率报告显示选项（show_missing=True、skip_covered=True）
-- [ ] 17.6 验证pytest-cov命令行参数（--cov、--cov-report、--cov-fail-under）
-- [ ] 17.7 验证覆盖率数据收集正确性（pytest tests/st/ --cov=vllm_ascend）
-- [ ] 17.8 验证覆盖率报告生成正确性（HTML、XML、JSON报告生成）
-- [ ] 17.9 验证覆盖率门禁生效（--cov-fail-under=80门禁控制）
-- [ ] 17.10 验证分支覆盖率收集（pytest --cov-branch）
-- [ ] 17.11 验证覆盖率数据追加（pytest --cov-append合并UT/ST/E2E覆盖率）
-- [ ] 17.12 实现覆盖率门禁分级策略（Level 1: 80%, Level 2: 90%）
-- [ ] 17.13 实现模块覆盖率门禁（Worker≥85%, Attention≥85%, Scheduler≥80%）
-- [ ] 17.14 实现覆盖率HTML报告可视化（coverage html生成htmlcov/index.html）
-- [ ] 17.15 实现覆盖率趋势追踪（coverage_history/*.json存储历史数据）
-- [ ] 17.16 实现覆盖率趋势脚本（coverage_trend.py生成趋势图）
-- [ ] 17.17 实现覆盖率仪表板（COVERAGE_REPORT.md展示覆盖率统计）
-- [ ] 17.18 实现覆盖率ASCII图表（显示覆盖率百分比条形图）
-- [ ] 17.19 实现覆盖率JSON报告解析（提取覆盖率数据用于趋势分析）
-- [ ] 17.20 实现覆盖率XML报告解析（用于CI集成Codecov）
-- [ ] 17.21 配置GitHub Actions覆盖率集成（st_coverage.yml）
-- [ ] 17.22 配置覆盖率上传到Codecov（上传coverage.xml）
-- [ ] 17.23 配置PR覆盖率评论（PR评论显示覆盖率变化）
-- [ ] 17.24 编写覆盖率使用文档（pytest-cov命令行参数使用说明）
-- [ ] 17.25 编写覆盖率门禁配置文档（fail_under分级策略说明）
-- [ ] 17.26 编写覆盖率报告解读文档（HTML/XML/JSON报告解读）
-- [ ] 17.27 编写覆盖率趋势追踪文档（coverage_history使用说明）
-- [ ] 17.28 验证覆盖率数据看护完整性（覆盖率收集→报告→门禁→可视化全流程）
+- [x] 17.1 创建.coveragerc配置文件（定义source、omit、exclude_lines等）
+- [x] 17.2 配置覆盖率排除规则（排除tests/*、__pycache__/*等）
+- [x] 17.3 配置覆盖率报告输出路径（htmlcov、coverage.xml、coverage.json）
+- [x] 17.4 配置覆盖率门禁阈值（fail_under=80）
+- [x] 17.5 配置覆盖率报告显示选项（show_missing=True、skip_covered=True）
+- [x] 17.6 验证pytest-cov命令行参数（--cov、--cov-report、--cov-fail-under）
+- [x] 17.7 验证覆盖率数据收集正确性（pytest tests/st/ --cov=vllm_ascend）
+- [x] 17.8 验证覆盖率报告生成正确性（HTML、XML、JSON报告生成）
+- [x] 17.9 验证覆盖率门禁生效（--cov-fail-under=80门禁控制）
+- [x] 17.10 验证分支覆盖率收集（pytest --cov-branch）
+- [x] 17.11 验证覆盖率数据追加（pytest --cov-append合并UT/ST/E2E覆盖率）
+- [x] 17.12 实现覆盖率门禁分级策略（Level 1: 80%, Level 2: 90%）
+- [x] 17.13 实现模块覆盖率门禁（Worker≥85%, Attention≥85%, Scheduler≥80%）
+- [x] 17.14 实现覆盖率HTML报告可视化（coverage html生成htmlcov/index.html）
+- [x] 17.15 实现覆盖率趋势追踪（coverage_history/*.json存储历史数据）
+- [x] 17.16 实现覆盖率趋势脚本（coverage_trend.py生成趋势图）
+- [x] 17.17 实现覆盖率仪表板（COVERAGE_REPORT.md展示覆盖率统计）
+- [x] 17.18 实现覆盖率ASCII图表（显示覆盖率百分比条形图）
+- [x] 17.19 实现覆盖率JSON报告解析（提取覆盖率数据用于趋势分析）
+- [x] 17.20 实现覆盖率XML报告解析（用于CI集成Codecov）
+- [x] 17.21 配置GitHub Actions覆盖率集成（st_coverage.yml）
+- [x] 17.22 配置覆盖率上传到Codecov（上传coverage.xml）
+- [x] 17.23 配置PR覆盖率评论（PR评论显示覆盖率变化）
+- [x] 17.24 编写覆盖率使用文档（pytest-cov命令行参数使用说明）
+- [x] 17.25 编写覆盖率门禁配置文档（fail_under分级策略说明）
+- [x] 17.26 编写覆盖率报告解读文档（HTML/XML/JSON报告解读）
+- [x] 17.27 编写覆盖率趋势追踪文档（coverage_history使用说明）
+- [x] 17.28 验证覆盖率数据看护完整性（覆盖率收集→报告→门禁→可视化全流程）
 
 ## 18. CI/CD集成设计（复用现有workflow架构）
 
-- [ ] 18.1 修正设计文档环境依赖假设（ST测试必须依赖CANN container，源代码强依赖torch_npu）
-- [ ] 18.2 验证环境依赖假设修正正确性（platform.py、worker_v1.py、utils.py依赖分析）
-- [ ] 18.3 添加st_tracker到changes filter（tests/st/**触发ST测试）
-- [ ] 18.4 验证st_tracker触发机制正确性（tests/st/变更触发ST job）
-- [ ] 18.5 添加st-cpu-mock job到vllm_ascend_test.yaml（扩展workflow而非独立workflow）
-- [ ] 18.6 验证st-cpu-mock job执行正确性（CANN container、pytest执行、覆盖率收集）
-- [ ] 18.7 配置st-cpu-mock job环境变量（VLLM_LOGGING_LEVEL、VLLM_WORKER_MULTIPROC_METHOD）
-- [ ] 18.8 配置st-cpu-mock pytest参数（--exec-mode=cpu_mock、--cov、--cov-fail-under=80）
-- [ ] 18.9 配置st-cpu-mock vllm版本矩阵（vllm_version: [main, v0.10.0]）
-- [ ] 18.10 验证双版本ST测试正确性（main和v0.10.0版本ST测试通过）
-- [ ] 18.11 配置Codecov flags: st_tests（区分UT和ST覆盖率）
-- [ ] 18.12 更新codecov.yml添加st_tests项目状态（target: 85%）
-- [ ] 18.13 配置覆盖率上传到Codecov（flags: st_tests、name: vllm-ascend-st）
-- [ ] 18.14 验证Codecov flags正确性（UT和ST覆盖率独立显示）
-- [ ] 18.15 配置执行顺序（lint → ut → st-cpu-mock → e2e）
-- [ ] 18.16 验证执行顺序正确性（ST测试先于E2E、快速门禁）
-- [ ] 18.17 配置ST测试执行时间门禁（≤5分钟）
-- [ ] 18.18 验证ST测试执行时间（CI执行时间符合门禁要求）
-- [ ] 18.19 配置workflow concurrency控制（避免ST测试重复执行）
-- [ ] 18.20 验证workflow concurrency正确性（同一ref只执行一次ST测试）
-- [ ] 18.21 编写CI/CD集成文档（workflow结构、changes filter、job配置说明）
-- [ ] 18.22 编写环境依赖说明文档（CANN container依赖、torch_npu依赖）
-- [ ] 18.23 验证CI/CD集成完整性（workflow→changes filter→job→coverage→codecov全流程）
-- [ ] 18.24 验证ST测试与UT/E2E协调正确性（并行执行、覆盖率合并）
+- [x] 18.1 修正设计文档环境依赖假设（ST测试必须依赖CANN container，源代码强依赖torch_npu）
+- [x] 18.2 验证环境依赖假设修正正确性（platform.py、worker_v1.py、utils.py依赖分析）
+- [x] 18.3 添加st_tracker到changes filter（tests/st/**触发ST测试）
+- [x] 18.4 验证st_tracker触发机制正确性（tests/st/变更触发ST job）
+- [x] 18.5 添加st-cpu-mock job到vllm_ascend_test.yaml（扩展workflow而非独立workflow）
+- [x] 18.6 验证st-cpu-mock job执行正确性（CANN container、pytest执行、覆盖率收集）
+- [x] 18.7 配置st-cpu-mock job环境变量（VLLM_LOGGING_LEVEL、VLLM_WORKER_MULTIPROC_METHOD）
+- [x] 18.8 配置st-cpu-mock pytest参数（--exec-mode=cpu_mock、--cov、--cov-fail-under=80）
+- [x] 18.9 配置st-cpu-mock vllm版本矩阵（vllm_version: [main, v0.10.0]）
+- [x] 18.10 验证双版本ST测试正确性（main和v0.10.0版本ST测试通过）
+- [x] 18.11 配置Codecov flags: st_tests（区分UT和ST覆盖率）
+- [x] 18.12 更新codecov.yml添加st_tests项目状态（target: 85%）
+- [x] 18.13 配置覆盖率上传到Codecov（flags: st_tests、name: vllm-ascend-st）
+- [x] 18.14 验证Codecov flags正确性（UT和ST覆盖率独立显示）
+- [x] 18.15 配置执行顺序（lint → ut → st-cpu-mock → e2e）
+- [x] 18.16 验证执行顺序正确性（ST测试先于E2E、快速门禁）
+- [x] 18.17 配置ST测试执行时间门禁（≤5分钟）
+- [x] 18.18 验证ST测试执行时间（CI执行时间符合门禁要求）
+- [x] 18.19 配置workflow concurrency控制（避免ST测试重复执行）
+- [x] 18.20 验证workflow concurrency正确性（同一ref只执行一次ST测试）
+- [x] 18.21 编写CI/CD集成文档（workflow结构、changes filter、job配置说明）
+- [x] 18.22 编写环境依赖说明文档（CANN container依赖、torch_npu依赖）
+- [x] 18.23 验证CI/CD集成完整性（workflow→changes filter→job→coverage→codecov全流程）
+- [x] 18.24 验证ST测试与UT/E2E协调正确性（并行执行、覆盖率合并）

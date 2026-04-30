@@ -1,0 +1,82 @@
+# Default ST test configuration
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# This file is a part of the vllm-ascend project.
+#
+
+# Default configuration
+default:
+  exec_mode: auto
+  timeout: 300
+  batch_size: [1, 16, 32]
+  dtype: ["float16", "bfloat16"]
+  seq_len: [128, 512, 1024]
+
+# Models configuration
+models:
+  default_model:
+    name: "Qwen/Qwen2.5-0.5B-Instruct"
+    max_model_len: 2048
+    dtype: "float16"
+    
+  Qwen-0.5B:
+    name: "Qwen/Qwen2.5-0.5B-Instruct"
+    max_model_len: 2048
+    dtype: "float16"
+    batch_size: [1, 16, 32]
+    
+  Qwen-7B:
+    name: "Qwen/Qwen2.5-7B-Instruct"
+    max_model_len: 4096
+    dtype: "bfloat16"
+    batch_size: [1, 8, 16]
+
+# Tests configuration
+tests:
+  default_test:
+    exec_mode: auto
+    timeout: 300
+    
+  worker_test:
+    exec_mode: cpu_mock
+    timeout: 120
+    batch_size: [1, 16, 32]
+    dtype: ["float16", "bfloat16"]
+    
+  scheduler_test:
+    exec_mode: cpu_mock
+    timeout: 120
+    num_running_reqs: [1, 16, 32, 64]
+    token_budget: [256, 512, 1024, 2048]
+    
+  attention_test:
+    exec_mode: cpu_mock
+    timeout: 120
+    seq_len: [128, 512, 1024]
+    mask_type: ["full", "causal", "sliding_window"]
+    
+  quantization_test:
+    exec_mode: cpu_mock
+    timeout: 120
+    quant_method: ["w8a8", "w8a8_dynamic", "w4a8"]
+    
+  distributed_test:
+    exec_mode: cpu_mock
+    timeout: 120
+    world_size: [1, 2, 4, 8]
+    
+  sample_test:
+    exec_mode: cpu_mock
+    timeout: 120
+    batch_size: [1, 16, 32]
+    temperature: [0.0, 0.5, 0.7, 0.9, 1.0]

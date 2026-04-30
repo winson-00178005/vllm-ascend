@@ -1,0 +1,96 @@
+# NPU deep test configuration
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# This file is a part of the vllm-ascend project.
+#
+
+# NPU deep configuration - comprehensive testing with real hardware
+default:
+  exec_mode: npu_real
+  timeout: 600
+  batch_size: [1, 16, 32, 64]
+  dtype: ["float16", "bfloat16"]
+  seq_len: [128, 512, 1024, 2048]
+
+# Models for NPU deep testing
+models:
+  default_model:
+    name: "Qwen/Qwen2.5-0.5B-Instruct"
+    max_model_len: 2048
+    dtype: "float16"
+    
+  Qwen-0.5B:
+    name: "Qwen/Qwen2.5-0.5B-Instruct"
+    max_model_len: 2048
+    dtype: "float16"
+    
+  Qwen-7B:
+    name: "Qwen/Qwen2.5-7B-Instruct"
+    max_model_len: 4096
+    dtype: "bfloat16"
+
+# Comprehensive tests for NPU deep
+tests:
+  default_test:
+    exec_mode: npu_real
+    timeout: 600
+    
+  worker_test:
+    exec_mode: npu_real
+    timeout: 300
+    batch_size: [1, 16, 32, 64]
+    performance_test: true
+    
+  scheduler_test:
+    exec_mode: npu_real
+    timeout: 300
+    num_running_reqs: [1, 16, 32, 64, 128]
+    
+  attention_test:
+    exec_mode: npu_real
+    timeout: 300
+    seq_len: [128, 512, 1024, 2048]
+    precision_test: true
+    
+  quantization_test:
+    exec_mode: npu_real
+    timeout: 300
+    quant_method: ["w8a8", "w8a8_dynamic", "w4a8"]
+    precision_test: true
+    
+  distributed_test:
+    exec_mode: npu_real
+    timeout: 600
+    world_size: [2, 4, 8]
+    
+  sample_test:
+    exec_mode: npu_real
+    timeout: 300
+    batch_size: [1, 16, 32, 64]
+    precision_test: true
+    
+  performance_test:
+    exec_mode: npu_real
+    timeout: 600
+    performance_baseline: "performance_baseline.json"
+    
+  precision_test:
+    exec_mode: npu_real
+    timeout: 600
+    precision_threshold:
+      attention:
+        rtol: 1e-3
+        atol: 1e-5
+      quantization:
+        rtol: 1e-2
+        atol: 1e-4
