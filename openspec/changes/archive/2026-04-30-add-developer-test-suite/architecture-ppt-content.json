@@ -1,0 +1,183 @@
+{
+  "metadata": {
+    "title": "vllm-ascend ST测试框架架构设计",
+    "subtitle": "填补UT与E2E测试空白，实现质的飞跃",
+    "author": "vllm-ascend开发团队",
+    "date": "2026年4月",
+    "template": "professional",
+    "language": "zh-CN"
+  },
+  "slides": [
+    {
+      "type": "title",
+      "title": "vllm-ascend ST测试框架架构设计",
+      "subtitle": "填补UT与E2E测试空白，实现质的飞跃",
+      "author": "vllm-ascend开发团队",
+      "date": "2026年4月"
+    },
+    {
+      "type": "content",
+      "title": "当前测试分层现状",
+      "items": [
+        "UT测试（tests/ut/）：单个函数/类级别功能，Mock torch_npu，秒级执行，54个文件",
+        "ST测试（tests/st/）：缺失！模块间协作验证，插件接口兼容性，分钟级执行，0个文件",
+        "E2E测试（tests/e2e/）：完整推理流程，真实NPU环境+真实模型，分钟级执行，49个文件",
+        "核心问题：45次模型加载/卸载，模块协作问题只能在E2E发现"
+      ],
+      "notes": "展示测试分层现状，强调ST测试缺失导致的问题"
+    },
+    {
+      "type": "content",
+      "title": "核心痛点：E2E测试效率问题",
+      "items": [
+        "问题1：45次VllmRunner实例创建，同一模型多次加载（如DeepSeek-V3-Pruning加载2次）",
+        "问题2：分钟级执行时间（45-135分钟），无法作为CI门禁",
+        "问题3：E2E测试失败时难以定位具体模块，调试成本高",
+        "数据证据：16个测试文件，45次实例创建，cleanup_dist_env_and_memory()每次执行"
+      ],
+      "notes": "强调E2E测试效率问题的严重性，用数据支撑"
+    },
+    {
+      "type": "content",
+      "title": "ST测试框架设计目标",
+      "items": [
+        "核心目标1：填补UT和E2E中间测试层",
+        "核心目标2：解决45次模型重复加载问题",
+        "核心目标3：快速验证模块间协作（秒级vs分钟级）",
+        "核心目标4：实现CI门禁（≤5分钟）",
+        "预期效果：执行效率提升50%，防护效果提升，演进难度降低"
+      ],
+      "notes": "明确设计目标，强调预期效果的质的飞跃"
+    },
+    {
+      "type": "diagram",
+      "title": "三层解耦架构设计",
+      "diagram_type": "architecture",
+      "description": "Environment Layer (session) → Model Layer (module) → TestCase Layer (function)",
+      "items": [
+        "Layer 1: Environment Layer - NPU环境初始化（一次性），torch_npu初始化，避免重复环境初始化",
+        "Layer 2: Model Layer - ModelPool管理模型实例，模型缓存避免重复加载，解决45次加载问题",
+        "Layer 3: TestCase Layer - 从ModelPool获取模型，不直接加载模型，保证测试独立性"
+      ],
+      "notes": "展示三层架构的分层逻辑和每层的作用"
+    },
+    {
+      "type": "content",
+      "title": "ModelPool模型缓存池设计",
+      "items": [
+        "核心功能：缓存模型实例，避免重复加载",
+        "关键方法：get_or_create(model_name, config, copy_on_use=False)",
+        "缓存策略：cache_key包含dtype、max_model_len、quantization、tensor_parallel_size",
+        "效率提升：45次加载 → 23次加载（减少50%）",
+        "执行时间：45分钟 → 23分钟（节省22分钟）"
+      ],
+      "notes": "强调ModelPool的核心作用和效率提升效果"
+    },
+    {
+      "type": "content",
+      "title": "ConfigLoader配置驱动设计",
+      "items": [
+        "核心功能：YAML配置文件管理，配置驱动测试，避免硬编码",
+        "配置文件结构：default.yaml, ci_fast.yaml, npu_deep.yaml",
+        "命令行控制：pytest tests/st/ --config-file=ci_fast.yaml --model=Qwen-7B",
+        "优势：配置变更修改YAML（vs修改代码），多环境支持不同配置文件"
+      ],
+      "notes": "强调配置驱动的优势，降低维护成本"
+    },
+    {
+      "type": "content",
+      "title": "简化路径 + 完整路径双模式",
+      "items": [
+        "简化路径（适合简单测试）：直接创建Mock对象，不依赖三层架构，学习成本低",
+        "完整路径（适合复杂测试）：使用三层架构，ModelPool缓存模型，ConfigLoader加载配置",
+        "双路径优势：降低学习成本（简化路径），保证功能完整（完整路径）",
+        "适用场景：接口验证用简化路径，模块协作用完整路径"
+      ],
+      "notes": "强调双路径设计的用户友好性"
+    },
+    {
+      "type": "content",
+      "title": "CPU Mock + NPU真实双模式",
+      "items": [
+        "CPU Mock模式：Mock torch_npu.npu_*，Mock NPU硬件，秒级执行，验证模块协作，CI门禁",
+        "NPU真实模式：真实torch_npu.npu_*，真实NPU硬件，分钟级执行，验证性能/精度，深度测试",
+        "命令行控制：pytest tests/st/ --exec-mode=cpu_mock 或 --exec-mode=npu_real",
+        "双模式优势：快速CI（Mock）+深度测试（真实）"
+      ],
+      "notes": "强调双模式的灵活性和适用场景"
+    },
+    {
+      "type": "content",
+      "title": "精度/性能看护能力设计",
+      "items": [
+        "精度看护：CPU Mock生成参考结果，NPU真实执行推理，对比精度误差（rtol=1e-3, atol=1e-5）",
+        "性能看护：执行时间测量，内存占用测量，吞吐量测量，对比性能基准（performance_baseline.json）",
+        "周边组件集成：CANN、ACL Graph、HCCL、torchair集成测试",
+        "看护能力：精度误差告警，性能退化告警，周边组件版本兼容告警"
+      ],
+      "notes": "强调框架可支持精度/性能看护，长期优化路径"
+    },
+    {
+      "type": "table",
+      "title": "长期优化路径",
+      "table_data": {
+        "long_term": {
+          "title": "长期优化（5周）",
+          "items": [
+            "P6: 精度看护 → CPU vs NPU对比（2周）",
+            "P7: 性能看护 → 性能测量和对比（2周）",
+            "P8: fixture调试工具 → 依赖图生成（1周）"
+          ]
+        }
+      },
+      "notes": "展示优化路径规划，强调工期和风险"
+    },
+    {
+      "type": "content",
+      "title": "可行性验证结论",
+      "items": [
+        "执行效率：质的飞跃 ✅ - ModelPool缓存减少50%加载时间，CPU Mock达到秒级，可作为CI门禁",
+        "防护效果：质的飞跃 ✅ - 填补中间测试层，快速发现模块协作问题（秒级vs分钟级），可定位问题模块",
+        "测试用例演进：难度降低 ✅ - 配置驱动修改YAML（vs修改代码），ModelPool缓存模型（vs多次加载）",
+        "精度/性能看护：可支持 ✅ - 框架可支持（需NPU环境），长期优化路径（5周）"
+      ],
+      "notes": "总结可行性验证结论，强调质的飞跃和需修复的问题"
+    },
+    {
+      "type": "content",
+      "title": "实施计划与里程碑",
+      "items": [
+        "Phase 1: 框架搭建（2周） - 三层解耦架构、ModelPool、ConfigLoader",
+        "Phase 2: 核心测试（2周） - Worker、Scheduler、Attention模块ST测试",
+        "Phase 3: 扩展测试（1周） - Quantization、Distributed、Sample模块ST测试",
+        "Phase 4: CI集成（1周） - CI workflow配置、覆盖率报告、文档完善",
+        "Phase 5: 深度看护（5周） - 精度看护、性能看护、周边组件集成测试",
+        "总工期：6周核心实施 + 5周长期优化"
+      ],
+      "notes": "展示实施计划，强调里程碑和工期"
+    },
+    {
+      "type": "content",
+      "title": "总结与展望",
+      "items": [
+        "核心成果：填补UT和E2E中间测试层，解决45次模型重复加载，实现三层解耦架构",
+        "预期效果：执行效率提升50%，快速发现模块协作问题，降低测试演进难度，可作为CI门禁",
+        "下一步行动：实施Phase 1框架搭建（2周），验证依赖隔离，实现精度/性能看护",
+        "展望：ST测试框架将成为vllm-ascend测试体系的核心层，提升测试效率和防护效果"
+      ],
+      "notes": "总结演讲内容，展望未来"
+    },
+    {
+      "type": "appendix",
+      "title": "参考资料",
+      "items": [
+        "设计文档：openspec/changes/add-developer-test-suite/design.md（1594行）",
+        "任务清单：openspec/changes/add-developer-test-suite/tasks.md（210 tasks）",
+        "规范文档：develop-test-spec.md",
+        "现有UT测试：tests/ut/base.py（双基类设计）",
+        "现有E2E测试：tests/e2e/conftest.py（VllmRunner模式）"
+      ],
+      "notes": "提供参考资料链接，便于深入了解"
+    }
+  ]
+}
