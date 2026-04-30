@@ -81,19 +81,19 @@
 
 ## 5. Quantization模块集成测试（插件内部协作 + 双模式 + 精度测试）
 
-- [ ] 5.1 创建tests/st/quantization/目录和conftest.py（模块级fixtures、execution_environment fixture）
-- [ ] 5.2 使用Mock工厂函数创建量化相关Mock（含spec限制、参考test_w8a8.py模式）
-- [ ] 5.3 实现AscendQuantConfig与模型加载集成测试（插件内部协作、量化配置、setUp初始化量化器）
-- [ ] 5.4 验证AscendQuantizer与vllm.Quantizer接口兼容（接口兼容性测试）
-- [ ] 5.5 实现W8A8量化集成测试（参数化量化类型、异常验证NotImplementedError）
-- [ ] 5.6 实现动态量化集成测试（参数化dtype、Mock验证量化调用次数）
-- [ ] 5.7 实现Quantization与分布式集成测试（Tensor Parallel、STRunner管理分布式资源）
-- [ ] 5.8 参数化双模式测试（exec_mode=["cpu_mock", "npu_real"]）
-- [ ] 5.9 实现NPU真实模式精度测试（对比量化前后数值精度、验证量化误差）
-- [ ] 5.10 吸纳tests/ut/quantization/test_w8a8.py优秀模式（spec限制Mock、详细异常验证）
-- [ ] 5.11 吸纳tests/ut/quantization/test_quantizer.py优秀模式（setUp/tearDown管理全局常量）
-- [ ] 5.12 标记双模式测试用例（@pytest.mark.cpu_mock、@pytest.mark.npu_real）
-- [ ] 5.13 标记精度测试用例（@pytest.mark.npu_precision）
+- [x] 5.1 创建tests/st/quantization/目录和conftest.py（模块级fixtures、execution_environment fixture）
+- [x] 5.2 使用Mock工厂函数创建量化相关Mock（含spec限制、参考test_w8a8.py模式）
+- [x] 5.3 实现AscendQuantConfig与模型加载集成测试（插件内部协作、量化配置、setUp初始化量化器）
+- [x] 5.4 验证AscendQuantizer与vllm.Quantizer接口兼容（接口兼容性测试）
+- [x] 5.5 实现W8A8量化集成测试（参数化量化类型、异常验证NotImplementedError）
+- [x] 5.6 实现动态量化集成测试（参数化dtype、Mock验证量化调用次数）
+- [x] 5.7 实现Quantization与分布式集成测试（Tensor Parallel、STRunner管理分布式资源）
+- [x] 5.8 参数化双模式测试（exec_mode=["cpu_mock", "npu_real"]）
+- [x] 5.9 实现NPU真实模式精度测试（对比量化前后数值精度、验证量化误差）
+- [x] 5.10 吸纳tests/ut/quantization/test_w8a8.py优秀模式（spec限制Mock、详细异常验证）
+- [x] 5.11 吸纳tests/ut/quantization/test_quantizer.py优秀模式（setUp/tearDown管理全局常量）
+- [x] 5.12 标记双模式测试用例（@pytest.mark.cpu_mock、@pytest.mark.npu_real）
+- [x] 5.13 标记精度测试用例（@pytest.mark.npu_precision）
 
 ## 6. Distributed模块集成测试（插件内部协作 + 双模式 + NPU真实测试）
 
