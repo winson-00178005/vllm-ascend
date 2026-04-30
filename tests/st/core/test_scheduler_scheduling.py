@@ -305,7 +305,7 @@ class TestSchedulerExceptionHandling(PytestSTBase):
         with pytest.raises(RuntimeError) as cm:
             mock_scheduler.schedule()
         
-        assert "resource conflict" in str(cm.exception)
+        assert "resource conflict" in str(cm.value)
 
     @pytest.mark.cpu_mock
     def test_scheduler_request_overflow_error(self, mock_scheduler):
@@ -329,7 +329,7 @@ class TestSchedulerExceptionHandling(PytestSTBase):
         with pytest.raises(RuntimeError) as cm:
             mock_scheduler.schedule()
         
-        assert "overflow" in str(cm.exception)
+        assert "overflow" in str(cm.value)
 
     @pytest.mark.cpu_mock
     def test_scheduler_abort_request(self, mock_scheduler):

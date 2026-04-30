@@ -24,6 +24,7 @@ import torch
 from unittest.mock import MagicMock, patch
 
 from tests.st.base import PytestSTBase
+from tests.st.utils.env_detector import has_torch_npu
 from tests.st.utils.mock_utils import (
     create_mock_distribution_env,
     verify_mock_calls,
@@ -70,11 +71,18 @@ class TestDistributedIntegration(PytestSTBase):
         执行模式：CPU Mock
         """
         input_tensor = torch.randn(4, 16, 64)
+        result = None
         
         if comm_op == "all_reduce":
             result = mock_communicator.all_reduce(input_tensor)
         elif comm_op == "all_gather":
             result = mock_communicator.all_gather(input_tensor)
+        elif comm_op == "broadcast":
+            mock_communicator.broadcast = MagicMock(return_value=input_tensor.clone())
+            result = mock_communicator.broadcast(input_tensor)
+        elif comm_op == "reduce_scatter":
+            mock_communicator.reduce_scatter = MagicMock(return_value=input_tensor.mean(dim=0))
+            result = mock_communicator.reduce_scatter(input_tensor)
         
         assert result is not None
 

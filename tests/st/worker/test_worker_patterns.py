@@ -119,8 +119,8 @@ class TestWorkerExceptionPattern(PytestSTBase):
         with pytest.raises(RuntimeError) as cm:
             worker.execute_model()
         
-        assert "memory allocation" in str(cm.exception)
-        assert "OOM" in str(cm.exception)
+        assert "memory allocation" in str(cm.value)
+        assert "OOM" in str(cm.value)
 
     @pytest.mark.cpu_mock
     def test_worker_device_error_propagation(self):
@@ -146,8 +146,8 @@ class TestWorkerExceptionPattern(PytestSTBase):
         with pytest.raises(RuntimeError) as cm:
             worker.execute_model()
         
-        assert "device" in str(cm.exception)
-        assert "offline" in str(cm.exception)
+        assert "device" in str(cm.value)
+        assert "offline" in str(cm.value)
 
     @pytest.mark.cpu_mock
     def test_worker_config_error_propagation(self):
@@ -173,8 +173,8 @@ class TestWorkerExceptionPattern(PytestSTBase):
         with pytest.raises(ValueError) as cm:
             worker.initialize_model()
         
-        assert "invalid config" in str(cm.exception)
-        assert "dtype" in str(cm.exception)
+        assert "invalid config" in str(cm.value)
+        assert "dtype" in str(cm.value)
 
     @pytest.mark.cpu_mock
     def test_worker_runtime_error_with_context(self):
@@ -201,9 +201,9 @@ class TestWorkerExceptionPattern(PytestSTBase):
         with pytest.raises(RuntimeError) as cm:
             worker.execute_model()
         
-        assert "batch_size=16" in str(cm.exception)
-        assert "stage=prefill" in str(cm.exception)
-        assert "error=timeout" in str(cm.exception)
+        assert "batch_size=16" in str(cm.value)
+        assert "stage=prefill" in str(cm.value)
+        assert "error=timeout" in str(cm.value)
 
 
 class TestWorkerMockVerificationPattern(PytestSTBase):
@@ -392,5 +392,5 @@ class TestWorkerCombinedPatterns(PytestSTBase):
         with pytest.raises(RuntimeError) as cm:
             worker.execute_model()
         
-        assert "execution failed" in str(cm.exception)
+        assert "execution failed" in str(cm.value)
         verify_mock_calls(worker.load_model, expected_calls=0)

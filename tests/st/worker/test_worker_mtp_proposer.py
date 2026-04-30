@@ -174,8 +174,8 @@ class TestWorkerMTPProposerIntegration(PytestSTBase):
         
         result = worker.verify_speculative_tokens(speculative_tokens, real_tokens)
         
-        assert result["accepted"].mean() == 3
-        assert result["rejected"].mean() == 1
+        assert result["accepted"].float().mean() == 3
+        assert result["rejected"].float().mean() == 1
 
     @pytest.mark.cpu_mock
     def test_worker_mtp_proposer_integration_flow(self):
@@ -298,7 +298,7 @@ class TestWorkerMTPProposerErrorHandling(PytestSTBase):
         with pytest.raises(RuntimeError) as cm:
             worker.get_speculative_tokens()
         
-        assert "MTProposer propose failed" in str(cm.exception)
+        assert "MTProposer propose failed" in str(cm.value)
 
     @pytest.mark.cpu_mock
     def test_mtp_proposer_all_tokens_rejected(self):
@@ -373,4 +373,4 @@ class TestWorkerMTPProposerErrorHandling(PytestSTBase):
         with pytest.raises(RuntimeError) as cm:
             worker.load_mtp_model()
         
-        assert "MTProposer load model failed" in str(cm.exception)
+        assert "MTProposer load model failed" in str(cm.value)

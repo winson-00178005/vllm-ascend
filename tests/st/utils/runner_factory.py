@@ -18,10 +18,15 @@
 Provides STRunner context manager for integration test execution.
 """
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from tests.st.utils.config_factory import create_ascend_config, create_vllm_config
-from tests.st.utils.mock_utils import create_mock_worker, create_mock_model_runner
+from tests.st.utils.mock_utils import (
+    create_mock_worker,
+    create_mock_model_runner,
+    create_mock_scheduler,
+    create_mock_attention,
+)
 
 
 class STRunner:
@@ -30,12 +35,12 @@ class STRunner:
     Reference: tests/e2e/conftest.py VllmRunner pattern
     """
 
-    def __init__(self, module_name: str, config: Optional[Dict] = None):
+    def __init__(self, module_name: str, config: Optional[Union[Dict, Any]] = None):
         """Initialize STRunner.
 
         Args:
             module_name: Module name (worker, scheduler, attention, etc.)
-            config: Configuration dict
+            config: Configuration dict or config object
         """
         self.module_name = module_name
         self.config = config or {}
@@ -43,12 +48,35 @@ class STRunner:
         self.model_runner = None
         self.scheduler = None
         self.attention = None
+        self._resources: Dict[str, Any] = {}
+        self._ascend_config = None
 
         self._init_module()
 
+    def register_resource(self, name: str, resource: Any) -> None:
+        """Register a resource for tracking.
+
+        Args:
+            name: Resource name
+            resource: Resource object
+        """
+        self._resources[name] = resource
+
+    def get_resource(self, name: str) -> Optional[Any]:
+        """Get a registered resource.
+
+        Args:
+            name: Resource name
+
+        Returns:
+            Resource object or None if not found
+        """
+        return self._resources.get(name)
+
     def _init_module(self):
         """Initialize module based on module_name."""
-        ascend_config = create_ascend_config(**self.config)
+        config_dict = self._extract_config_dict()
+        self._ascend_config = create_ascend_config(**config_dict)
 
         if self.module_name == "worker":
             self.worker = create_mock_worker()
@@ -57,6 +85,21 @@ class STRunner:
             self.scheduler = create_mock_scheduler()
         elif self.module_name == "attention":
             self.attention = create_mock_attention()
+
+    def _extract_config_dict(self) -> Dict[str, Any]:
+        """Extract config dict from various config types.
+
+        Returns:
+            Dict representation of config
+        """
+        if isinstance(self.config, dict):
+            return self.config
+        if hasattr(self.config, '__dict__'):
+            return {
+                k: v for k, v in self.config.__dict__.items()
+                if not k.startswith('_')
+            }
+        return {}
 
     def execute_integration(self, scenario: str) -> Any:
         """Execute integration test scenario.
@@ -89,6 +132,7 @@ class STRunner:
         self.model_runner = None
         self.scheduler = None
         self.attention = None
+        self._resources.clear()
 
 
 def create_st_runner(module_name: str,

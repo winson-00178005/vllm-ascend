@@ -18,12 +18,19 @@
 
 import pytest
 
-from vllm_ascend.utils import adapt_patch, register_ascend_customop
+_vllm_ascend_initialized = False
 
-adapt_patch()
-adapt_patch(True)
-
-register_ascend_customop()
+def _ensure_vllm_ascend_initialized():
+    global _vllm_ascend_initialized
+    if not _vllm_ascend_initialized:
+        try:
+            from vllm_ascend.utils import adapt_patch, register_ascend_customop
+            adapt_patch()
+            adapt_patch(True)
+            register_ascend_customop()
+            _vllm_ascend_initialized = True
+        except ImportError:
+            pass
 
 
 def pytest_addoption(parser):
@@ -82,10 +89,10 @@ def pytest_addoption(parser):
     )
 
     parser.addoption(
-        "--config-file",
+        "--st-config",
         action="store",
         default="tests/st/configs/default.yaml",
-        help="Path to test configuration file"
+        help="Path to ST test configuration file"
     )
 
     parser.addoption(
@@ -146,9 +153,9 @@ def performance_baseline(request):
 
 
 @pytest.fixture(scope="session")
-def config_file(request):
+def st_config(request):
     """Session scope: config file path from command line."""
-    return request.config.getoption("--config-file")
+    return request.config.getoption("--st-config")
 
 
 @pytest.fixture(scope="session")

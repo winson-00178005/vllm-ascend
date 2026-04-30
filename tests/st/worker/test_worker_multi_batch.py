@@ -225,12 +225,10 @@ class TestWorkerResourceConflictHandling(PytestSTBase):
         batch = create_mock_input_batch(batch_size=64)
         worker.input_batch = batch
         
-        worker.check_memory()
-        
         with pytest.raises(RuntimeError) as cm:
             worker.check_memory()
         
-        assert "memory conflict" in str(cm.exception)
+        assert "memory conflict" in str(cm.value)
 
     @pytest.mark.cpu_mock
     def test_worker_device_conflict_handling(self):
@@ -261,7 +259,7 @@ class TestWorkerResourceConflictHandling(PytestSTBase):
         with pytest.raises(RuntimeError) as cm:
             worker.check_device()
         
-        assert "device conflict" in str(cm.exception)
+        assert "device conflict" in str(cm.value)
 
     @pytest.mark.cpu_mock
     def test_worker_priority_scheduling_on_conflict(self):
@@ -365,5 +363,5 @@ class TestWorkerResourceConflictHandling(PytestSTBase):
         with pytest.raises(RuntimeError) as cm:
             worker.execute_with_timeout(batch, timeout=30)
         
-        assert "timeout" in str(cm.exception)
-        assert "30s" in str(cm.exception)
+        assert "timeout" in str(cm.value)
+        assert "30s" in str(cm.value)

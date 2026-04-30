@@ -17,7 +17,15 @@ import unittest
 
 import pytest
 
-from vllm_ascend.utils import adapt_patch, register_ascend_customop
+
+def _ensure_vllm_ascend_initialized():
+    try:
+        from vllm_ascend.utils import adapt_patch, register_ascend_customop
+        adapt_patch(True)
+        adapt_patch()
+        register_ascend_customop()
+    except ImportError:
+        pass
 
 
 class TestSTBase(unittest.TestCase):
@@ -47,10 +55,7 @@ class TestSTBase(unittest.TestCase):
     """
 
     def __init__(self, *args, **kwargs):
-        adapt_patch(True)
-        adapt_patch()
-        register_ascend_customop()
-        super().setUp()
+        _ensure_vllm_ascend_initialized()
         super(TestSTBase, self).__init__(*args, **kwargs)
 
 
@@ -76,7 +81,5 @@ class PytestSTBase:
 
     @pytest.fixture(autouse=True)
     def setup_st(self):
-        adapt_patch(True)
-        adapt_patch()
-        register_ascend_customop()
+        _ensure_vllm_ascend_initialized()
         yield

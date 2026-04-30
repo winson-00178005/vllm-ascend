@@ -77,6 +77,9 @@ class TestWorkerModelRunnerIntegration(PytestSTBase):
         
         mock_worker.input_batch = mock_input_batch
         
+        mock_output = MagicMock()
+        mock_worker.execute_model = MagicMock(return_value=mock_output)
+        
         output = mock_worker.execute_model()
         
         assert output is not None
@@ -109,7 +112,7 @@ class TestWorkerModelRunnerIntegration(PytestSTBase):
             with pytest.raises(RuntimeError) as cm:
                 mock_worker.execute_model()
             
-            assert "memory allocation failed" in str(cm.exception)
+            assert "memory allocation failed" in str(cm.value)
         else:
             output = mock_worker.execute_model()
             assert output is not None

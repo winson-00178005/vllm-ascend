@@ -220,7 +220,7 @@ class TestWorkerDualMode(PytestSTBase):
             )
             with pytest.raises(RuntimeError) as cm:
                 worker.execute_model()
-            assert "execution failed" in str(cm.exception)
+            assert "execution failed" in str(cm.value)
         else:
             worker.execute_model = MagicMock(
                 return_value=torch.randn(16, 128)

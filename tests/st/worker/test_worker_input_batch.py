@@ -21,7 +21,14 @@
 
 import pytest
 import torch
-import numpy as np
+
+try:
+    import numpy as np
+    HAS_NUMPY = True
+except ImportError:
+    HAS_NUMPY = False
+    np = None
+
 from unittest.mock import MagicMock, patch
 
 from tests.st.base import PytestSTBase
@@ -30,6 +37,9 @@ from tests.st.utils.mock_utils import (
     create_mock_input_batch,
     verify_mock_calls,
 )
+
+if not HAS_NUMPY:
+    pytestmark = pytest.mark.skip(reason="numpy not installed")
 
 
 class TestWorkerInputBatchIntegration(PytestSTBase):
@@ -283,7 +293,7 @@ class TestWorkerInputBatchErrorHandling(PytestSTBase):
         with pytest.raises(ValueError) as cm:
             worker.execute_model()
         
-        assert "InputBatch is empty" in str(cm.exception)
+        assert "InputBatch is empty" in str(cm.value)
 
     @pytest.mark.cpu_mock
     def test_input_batch_invalid_token_ids_error(self):
@@ -314,7 +324,7 @@ class TestWorkerInputBatchErrorHandling(PytestSTBase):
         with pytest.raises(ValueError) as cm:
             worker.execute_model()
         
-        assert "exceed vocab_size" in str(cm.exception)
+        assert "exceed vocab_size" in str(cm.value)
 
     @pytest.mark.cpu_mock
     def test_input_batch_memory_overflow_error(self):
@@ -340,5 +350,5 @@ class TestWorkerInputBatchErrorHandling(PytestSTBase):
         with pytest.raises(RuntimeError) as cm:
             worker.execute_model()
         
-        assert "memory allocation failed" in str(cm.exception)
-        assert "OOM" in str(cm.exception)
+        assert "memory allocation failed" in str(cm.value)
+        assert "OOM" in str(cm.value)

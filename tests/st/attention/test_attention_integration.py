@@ -23,6 +23,7 @@ import torch
 from unittest.mock import MagicMock
 
 from tests.st.base import PytestSTBase
+from tests.st.utils.env_detector import has_torch_npu
 from tests.st.utils.mock_utils import (
     create_mock_attention,
     create_mock_attention_mask,
@@ -208,10 +209,11 @@ class TestAttentionMLAIntegration(PytestSTBase):
         """
         attention = create_mock_attention(spec_attrs=['forward', 'compress_kv_cache'])
         mla = MagicMock()
-        mla.compress = MagicMock(return_value=torch.randn(16, 128, 512))
+        mla_compress_result = torch.randn(16, 128, 512)
+        mla.compress = MagicMock(return_value=mla_compress_result)
         
         attention.mla = mla
-        attention.compress_kv_cache = MagicMock(return_value=torch.randn(16, 128, 512))
+        attention.compress_kv_cache = MagicMock(side_effect=lambda: mla.compress())
         
         compressed = attention.compress_kv_cache()
         assert compressed is not None

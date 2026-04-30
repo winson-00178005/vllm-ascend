@@ -19,6 +19,7 @@
 """
 
 import pytest
+import sys
 import torch
 from unittest.mock import MagicMock, patch, PropertyMock
 
@@ -29,6 +30,37 @@ from tests.st.utils.mock_utils import (
     verify_mock_calls,
 )
 from tests.st.utils.runner_factory import STRunner
+
+
+def _setup_torch_npu_mock():
+    if 'torch_npu' not in sys.modules:
+        mock_torch_npu = MagicMock()
+        mock_torch_npu.npu = MagicMock()
+        mock_torch_npu.npu.current_device = MagicMock(return_value=0)
+        mock_torch_npu.npu.set_device = MagicMock()
+        mock_torch_npu.npu.empty_cache = MagicMock()
+        mock_torch_npu.npu.reset_peak_memory_stats = MagicMock()
+        mock_torch_npu.npu.synchronize = MagicMock()
+        sys.modules['torch_npu'] = mock_torch_npu
+    return sys.modules['torch_npu']
+
+
+def _setup_vllm_mock():
+    if 'vllm' not in sys.modules:
+        mock_vllm = MagicMock()
+        mock_vllm.config = MagicMock()
+        mock_vllm.config.VllmConfig = MagicMock
+        mock_vllm.config.ModelConfig = MagicMock
+        mock_vllm.config.ParallelConfig = MagicMock
+        mock_vllm.distributed = MagicMock()
+        mock_vllm.distributed.ensure_model_parallel_initialized = MagicMock()
+        mock_vllm.distributed.init_distributed_environment = MagicMock()
+        mock_vllm.distributed.destroy_model_parallel = MagicMock()
+        mock_vllm.distributed.destroy_distributed_environment = MagicMock()
+        sys.modules['vllm'] = mock_vllm
+        sys.modules['vllm.config'] = mock_vllm.config
+        sys.modules['vllm.distributed'] = mock_vllm.distributed
+    return sys.modules['vllm']
 
 
 class TestWorkerReplacementLogic(PytestSTBase):
@@ -47,17 +79,23 @@ class TestWorkerReplacementLogic(PytestSTBase):
 
         预期结果：ModelRunner正确初始化，引用正确
 
-        执行模式：CPU Mock
+执行模式：CPU Mock
         """
-        with patch('torch_npu') as mock_torch_npu, \
-             patch('vllm.config.VllmConfig') as mock_config, \
+        _setup_torch_npu_mock()
+        _setup_vllm_mock()
+        
+        try:
+            from vllm_ascend.worker.worker_v1 import NPUWorker
+        except ImportError as e:
+            pytest.skip(f"vllm_ascend not fully installed: {e}")
+        
+        with patch('vllm.config.VllmConfig') as mock_config, \
              patch('vllm.distributed.ensure_model_parallel_initialized'), \
              patch('vllm.distributed.init_distributed_environment'), \
              patch('vllm_ascend.utils.init_ascend_config'), \
              patch('vllm_ascend.utils.init_ascend_soc_version'), \
              patch('vllm_ascend.utils.adapt_patch'), \
              patch('vllm_ascend.ops.register_dummy_fusion_op'), \
-             patch('torch_npu.op_plugin.atb._atb_ops._register_atb_extensions'), \
              patch('vllm_ascend.platform.NPUPlatform') as mock_platform:
             
             mock_config_instance = MagicMock()
@@ -77,8 +115,6 @@ class TestWorkerReplacementLogic(PytestSTBase):
             with patch('vllm_ascend.worker.worker_v1.NPUModelRunner') as mock_runner_class:
                 mock_runner_instance = MagicMock()
                 mock_runner_class.return_value = mock_runner_instance
-                
-                from vllm_ascend.worker.worker_v1 import NPUWorker
                 
                 worker = NPUWorker(
                     vllm_config=mock_config_instance,

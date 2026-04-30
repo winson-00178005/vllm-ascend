@@ -377,7 +377,7 @@ class TestSamplerWorkerIntegration(PytestSTBase):
         with pytest.raises(RuntimeError) as cm:
             worker.sample.sample(torch.randn(16, 32000))
         
-        assert "sampling failed" in str(cm.exception)
+        assert "sampling failed" in str(cm.value)
 
 
 class TestSamplerDualMode(PytestSTBase):

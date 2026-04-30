@@ -24,6 +24,7 @@ import torch
 from unittest.mock import MagicMock, patch
 
 from tests.st.base import PytestSTBase
+from tests.st.utils.env_detector import has_torch_npu
 from tests.st.utils.mock_utils import verify_mock_calls
 from tests.st.utils.runner_factory import STRunner
 
@@ -406,7 +407,7 @@ class TestQuantizationException(PytestSTBase):
         with pytest.raises(NotImplementedError) as cm:
             mock_quant.quantize()
         
-        assert "not implemented" in str(cm.exception)
+        assert "not implemented" in str(cm.value)
 
     @pytest.mark.cpu_mock
     def test_quantizer_weight_shape_error(self):
@@ -431,7 +432,7 @@ class TestQuantizationException(PytestSTBase):
         with pytest.raises(ValueError) as cm:
             mock_quant.get_weight(128, 256)
         
-        assert "shape mismatch" in str(cm.exception)
+        assert "shape mismatch" in str(cm.value)
 
 
 class TestQuantizationDualMode(PytestSTBase):
