@@ -14,7 +14,7 @@
 - [x] 1.12 实现Mock验证函数verify_mock_calls（验证调用次数、参数、顺序）
 - [x] 1.13 实现spec限制Mock对象（提供create_spec_mock函数，避免过度Mock）
 - [x] 1.14 实现数据生成器data_generator.py（含预生成tensor、配置模板、全局常量定义）
-- [ ] 1.15 实现配置工厂config_factory.py（创建VllmConfig、ModelConfig、ParallelConfig等）
+- [x] 1.15 实现配置工厂config_factory.py（创建VllmConfig、ModelConfig、ParallelConfig等）
 - [ ] 1.16 实现配置工厂隔离vllm依赖（try-except ImportError、Fallback配置类、环境检测HAS_VLLM）
 - [ ] 1.17 定义vllm接口spec常量（VLLM_WORKER_SPEC、VLLM_ATTENTION_BACKEND_SPEC、VLLM_SCHEDULER_SPEC等）
 - [ ] 1.18 实现插件接口兼容性验证函数verify_plugin_interface_compatibility（检查插件组件实现vllm接口）
