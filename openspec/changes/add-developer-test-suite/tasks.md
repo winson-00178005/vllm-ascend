@@ -11,7 +11,7 @@
 - [x] 1.9 实现CPU Mock环境类（Mock torch_npu.npu_*、torch.npu.*、is_310p）
 - [x] 1.10 实现NPU真实环境类（验证NPU可用、性能测量measure_performance、精度测量measure_precision）
 - [x] 1.11 实现Mock工具类mock_utils.py（含Mock工厂函数：create_mock_worker、create_mock_distribution_env等）
-- [ ] 1.12 实现Mock验证函数verify_mock_calls（验证调用次数、参数、顺序）
+- [x] 1.12 实现Mock验证函数verify_mock_calls（验证调用次数、参数、顺序）
 - [ ] 1.13 实现spec限制Mock对象（提供create_spec_mock函数，避免过度Mock）
 - [ ] 1.14 实现数据生成器data_generator.py（含预生成tensor、配置模板、全局常量定义）
 - [ ] 1.15 实现配置工厂config_factory.py（创建VllmConfig、ModelConfig、ParallelConfig等）
