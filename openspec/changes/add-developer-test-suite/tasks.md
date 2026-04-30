@@ -2,14 +2,14 @@
 
 - [x] 1.1 创建tests/st/目录结构（包括base.py、conftest.py、utils/、fixtures/、runner_factory.py、performance/、precision/、integration/）
 - [x] 1.2 实现双基类设计（TestSTBase继承unittest.TestCase + PytestSTBase使用fixture autouse）
-- [ ] 1.3 实现setUp/tearDown资源管理（setUp初始化Mock环境、tearDown清理Mock状态）
-- [ ] 1.4 实现层级化fixtures（全局conftest.py使用session scope、模块级conftest.py使用参数化fixture）
-- [ ] 1.5 实现pytest_addoption命令行参数（参考tests/e2e/models/conftest.py模式）
-- [ ] 1.6 实现命令行参数fixture（exec_mode、enable_mock、performance_test、precision_test、npu_device）
-- [ ] 1.7 实现环境检测机制env_detector.py（自动检测torch_npu、NPU可用性、is_310p）
-- [ ] 1.8 实现选择性Mock工厂env_factory.py（CPUMockEnvironment、NPURealEnvironment类）
-- [ ] 1.9 实现CPU Mock环境类（Mock torch_npu.npu_*、torch.npu.*、is_310p）
-- [ ] 1.10 实现NPU真实环境类（验证NPU可用、性能测量measure_performance、精度测量measure_precision）
+- [x] 1.3 实现setUp/tearDown资源管理（setUp初始化Mock环境、tearDown清理Mock状态）
+- [x] 1.4 实现层级化fixtures（全局conftest.py使用session scope、模块级conftest.py使用参数化fixture）
+- [x] 1.5 实现pytest_addoption命令行参数（参考tests/e2e/models/conftest.py模式）
+- [x] 1.6 实现命令行参数fixture（exec_mode、enable_mock、performance_test、precision_test、npu_device）
+- [x] 1.7 实现环境检测机制env_detector.py（自动检测torch_npu、NPU可用性、is_310p）
+- [x] 1.8 实现选择性Mock工厂env_factory.py（CPUMockEnvironment、NPURealEnvironment类）
+- [x] 1.9 实现CPU Mock环境类（Mock torch_npu.npu_*、torch.npu.*、is_310p）
+- [x] 1.10 实现NPU真实环境类（验证NPU可用、性能测量measure_performance、精度测量measure_precision）
 - [ ] 1.11 实现Mock工具类mock_utils.py（含Mock工厂函数：create_mock_worker、create_mock_distribution_env等）
 - [ ] 1.12 实现Mock验证函数verify_mock_calls（验证调用次数、参数、顺序）
 - [ ] 1.13 实现spec限制Mock对象（提供create_spec_mock函数，避免过度Mock）
