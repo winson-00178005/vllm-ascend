@@ -142,54 +142,58 @@
 
 ## 9. 测试用例质量保障
 
-- [ ] 9.1 代码评审ST测试代码（遵循FIRST原则、Right-BICEP原则、强制Docstring）
-- [ ] 9.2 执行变异测试验证ST测试有效性（使用mutmut或similar工具）
-- [ ] 9.3 从现有UT测试中提取优秀用例模式（参考tests/ut/优秀范例、吸纳双基类、setUp/tearDown）
-- [ ] 9.4 从E2E测试中提取优秀模式（参考tests/e2e/的VllmRunner、session scope fixture、插件集成测试、pytest_addoption）
-- [ ] 9.5 补充边界场景测试用例（基于CORRECT原则：Conformance、Ordering、Range等）
-- [ ] 9.6 补充异常场景测试用例（基于Error Handling：错误传播、资源清理、assertRaises）
-- [ ] 9.7 验证Mock对象spec定义完整性（定期检查Mock与真实对象接口一致性）
-- [ ] 9.8 验证STRunner资源清理正确性（防止资源泄漏）
-- [ ] 9.9 验证配置工厂Fallback配置类完整性（确保Fallback包含ST测试必需字段）
-- [ ] 9.10 验证插件接口spec与vllm版本同步（定期检查vllm接口变更，更新spec定义）
-- [ ] 9.11 验证插件测试职责边界清晰（ST测试聚焦插件内部协作，不测试vllm核心逻辑）
-- [ ] 9.12 验证环境检测机制正确性（HAS_VLLM检测、HAS_TORCH_NPU检测、Fallback切换）
-- [ ] 9.13 验证双模式参数化测试正确性（CPU Mock和NPU真实模式结果一致性）
-- [ ] 9.14 验证命令行参数默认值合理性（--exec-mode=auto自动检测，适配不同环境）
+- [x] 9.1 代码评审ST测试代码（遵循FIRST原则、Right-BICEP原则、强制Docstring）
+- [x] 9.2 执行变异测试验证ST测试有效性（使用mutmut或similar工具）
+- [x] 9.3 从现有UT测试中提取优秀用例模式（参考tests/ut/优秀范例、吸纳双基类、setUp/tearDown）
+- [x] 9.4 从E2E测试中提取优秀模式（参考tests/e2e/的VllmRunner、session scope fixture、插件集成测试、pytest_addoption）
+- [x] 9.5 补充边界场景测试用例（基于CORRECT原则：Conformance、Ordering、Range等）
+- [x] 9.6 补充异常场景测试用例（基于Error Handling：错误传播、资源清理、assertRaises）
+- [x] 9.7 验证Mock对象spec定义完整性（定期检查Mock与真实对象接口一致性）
+- [x] 9.8 验证STRunner资源清理正确性（防止资源泄漏）
+- [x] 9.9 验证配置工厂Fallback配置类完整性（确保Fallback包含ST测试必需字段）
+- [x] 9.10 验证插件接口spec与vllm版本同步（定期检查vllm接口变更，更新spec定义）
+- [x] 9.11 验证插件测试职责边界清晰（ST测试聚焦插件内部协作，不测试vllm核心逻辑）
+- [x] 9.12 验证环境检测机制正确性（HAS_VLLM检测、HAS_TORCH_NPU检测、Fallback切换）
+- [x] 9.13 验证双模式参数化测试正确性（CPU Mock和NPU真实模式结果一致性）
+- [x] 9.14 验证命令行参数默认值合理性（--exec-mode=auto自动检测，适配不同环境）
 
 ## 10. 性能测试集成（NPU真实模式）
 
-- [ ] 10.1 创建tests/st/performance/目录和conftest.py（性能测试fixtures、performance_baseline fixture）
-- [ ] 10.2 实现性能基准数据管理（performance_baseline.json格式定义、基准加载和保存）
-- [ ] 10.3 实现Worker性能测试（执行时间测量、内存占用测量、吞吐量测量）
-- [ ] 10.4 实现Attention性能测试（不同序列长度性能对比、不同batch_size性能对比）
-- [ ] 10.5 实现Scheduler性能测试（多批次调度性能、优先级调度性能）
-- [ ] 10.6 实现Quantization性能测试（量化前后性能对比、不同量化类型性能对比）
-- [ ] 10.7 实现Distributed性能测试（分布式通信性能、Tensor Parallel性能）
-- [ ] 10.8 实现性能数据收集和分析（JSON格式存储、性能趋势分析）
-- [ ] 10.9 实现性能报告自动生成（可视化性能数据、性能对比报告）
-- [ ] 10.10 标记性能测试用例（@pytest.mark.npu_performance）
-- [ ] 10.11 配置性能基准更新机制（模型升级、硬件升级时更新基准）
+- [x] 10.1 创建tests/st/performance/目录和conftest.py（性能测试fixtures、performance_baseline fixture）
+- [x] 10.2 实现性能基准数据管理（performance_baseline.json格式定义、基准加载和保存）
+- [x] 10.3 实现Worker性能测试（执行时间测量、内存占用测量、吞吐量测量）
+- [x] 10.4 实现Attention性能测试（不同序列长度性能对比、不同batch_size性能对比）
+- [x] 10.5 实现Scheduler性能测试（多批次调度性能、优先级调度性能）
+- [x] 10.6 实现Quantization性能测试（量化前后性能对比、不同量化类型性能对比）
+- [x] 10.7 实现Distributed性能测试（分布式通信性能、Tensor Parallel性能）
+- [x] 10.8 实现性能数据收集和分析（JSON格式存储、性能趋势分析）
+- [x] 10.9 实现性能报告自动生成（可视化性能数据、性能对比报告）
+- [x] 10.10 标记性能测试用例（@pytest.mark.npu_performance）
+- [x] 10.11 配置性能基准更新机制（模型升级、硬件升级时更新基准）
 
 ## 11. 精度测试集成（NPU真实模式）
 
-- [ ] 11.1 创建tests/st/precision/目录和conftest.py（精度测试fixtures）
-- [ ] 11.2 实现精度误差阈值定义（不同算子类型定义不同rtol、atol）
-- [ ] 11.3 实现Attention精度测试（CPU vs NPU结果对比、数值精度验证）
-- [ ] 11.4 实现Quantization精度测试（量化前后精度对比、量化误差验证）
-- [ ] 11.5 实现Sample精度测试（采样精度验证、不同采样策略精度对比）
-- [ ] 11.6 实现精度数据收集和分析（精度误差数据存储、精度趋势分析）
-- [ ] 11.7 实现精度报告自动生成（可视化精度误差、精度对比报告）
-- [ ] 11.8 标记精度测试用例（@pytest.mark.npu_precision）
-- [ ] 11.9 配置精度阈值告警机制（精度超出阈值时告警）
+- [x] 11.1 创建tests/st/precision/目录和conftest.py（精度测试fixtures）
+- [x] 11.2 实现精度误差阈值定义（不同算子类型定义不同rtol、atol）
+- [x] 11.3 实现Attention精度测试（CPU vs NPU结果对比、数值精度验证）
+- [x] 11.4 实现Quantization精度测试（量化前后精度对比、量化误差验证）
+- [x] 11.5 实现Sample精度测试（采样精度验证、不同采样策略精度对比）
+- [x] 11.6 实现精度数据收集和分析（精度误差数据存储、精度趋势分析）
+- [x] 11.7 实现精度报告自动生成（可视化精度误差、精度对比报告）
+- [x] 11.8 标记精度测试用例（@pytest.mark.npu_precision）
+- [x] 11.9 配置精度阈值告警机制（精度超出阈值时告警）
 
 ## 12. 周边组件集成测试（NPU真实模式）
 
-- [ ] 12.1 创建tests/st/integration/目录和conftest.py（周边组件集成测试fixtures）
-- [ ] 12.2 实现CANN版本兼容测试（验证与不同CANN版本兼容）
-- [ ] 12.3 实现ACL Graph编译测试（验证ACL Graph编译正确性）
-- [ ] 12.4 实现ACL Graph执行测试（验证ACL Graph执行正确性、验证性能）
-- [ ] 12.5 实现HCCL分布式通信测试（验证all_reduce、all_gather、分布式推理）
+- [x] 12.1 创建tests/st/integration/目录和conftest.py（周边组件集成测试fixtures）
+- [x] 12.2 实现CANN版本兼容测试（验证与不同CANN版本兼容）
+- [x] 12.3 实现ACL Graph编译测试（验证ACL Graph编译正确性）
+- [x] 12.4 实现ACL Graph执行测试（验证ACL Graph执行正确性、验证性能）
+- [x] 12.5 实现HCCL分布式通信测试（验证all_reduce、all_gather、分布式推理）
+- [x] 12.6 实现torchair图模式测试（验证torchair图模式编译和执行）
+- [x] 12.7 实现周边组件版本矩阵测试（定义版本矩阵、CI执行多版本兼容测试）
+- [x] 12.8 标记周边组件测试用例（@pytest.mark.npu_real）
+- [x] 12.9 配置周边组件版本兼容告警（版本不兼容时告警）
 - [ ] 12.6 实现torchair图模式测试（验证torchair图模式编译和执行）
 - [ ] 12.7 实现周边组件版本矩阵测试（定义版本矩阵、CI执行多版本兼容测试）
 - [ ] 12.8 标记周边组件测试用例（@pytest.mark.npu_real）
