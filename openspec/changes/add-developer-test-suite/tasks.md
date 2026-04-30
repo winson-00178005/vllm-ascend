@@ -49,7 +49,7 @@
 
 ## 3. Scheduler模块集成测试（插件内部协作 + 双模式）
 
-- [ ] 3.1 创建tests/st/core/目录和conftest.py（模块级fixtures：scheduler_runner fixture、execution_environment fixture）
+- [x] 3.1 创建tests/st/core/目录和conftest.py（模块级fixtures：scheduler_runner fixture、execution_environment fixture）
 - [ ] 3.2 使用Mock工厂函数创建Scheduler和Worker Mock对象（含spec限制）
 - [ ] 3.3 实现AscendScheduler与AscendSchedulerConfig集成测试（插件内部协作、STRunner管理资源）
 - [ ] 3.4 验证AscendScheduler实现了vllm.Scheduler接口（使用verify_plugin_interface_compatibility检查VLLM_SCHEDULER_SPEC）
