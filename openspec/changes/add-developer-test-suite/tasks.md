@@ -125,20 +125,20 @@
 
 ## 8. CI集成与测试优化（双模式CI配置）
 
-- [ ] 8.1 编写ST测试运行脚本（run_st_tests.sh：支持单模块和全量执行、双模式执行）
-- [ ] 8.2 配置pytest-xdist并行执行（多进程并行，缩短执行时间≤5分钟）
-- [ ] 8.3 配置覆盖率报告生成（pytest-cov，生成XML和HTML报告）
+- [x] 8.1 编写ST测试运行脚本（run_st_tests.sh：支持单模块和全量执行、双模式执行）
+- [x] 8.2 配置pytest-xdist并行执行（多进程并行，缩短执行时间≤5分钟）
+- [x] 8.3 配置覆盖率报告生成（pytest-cov，生成XML和HTML报告）
 - [ ] 8.4 集成ST测试到CI workflow（GitHub Actions：添加ST测试job）
 - [ ] 8.5 配置双模式CI job（Job1 CPU Mock快速门禁、Job2 NPU真实深度测试可选）
 - [ ] 8.6 添加插件接口兼容性验证到CI（vllm版本升级时运行兼容性测试）
 - [ ] 8.7 添加环境检测机制到CI（检测vllm可用性、torch_npu可用性、灵活切换配置策略）
-- [ ] 8.8 优化ST测试执行时间（选择性Mock、预生成数据缓存、session scope fixture共享）
-- [ ] 8.9 配置CI门禁阈值（执行时间≤5分钟、覆盖率目标设置、NPU测试可选）
-- [ ] 8.10 编写ST测试框架文档（README.md：框架说明、STRunner使用指南、插件测试职责说明、双模式使用指南）
-- [ ] 8.11 编写ST测试编写规范文档（Docstring模板、参数化指南、异常测试模式、双模式测试指南）
-- [ ] 8.12 编写Mock工厂函数使用指南（create_mock_*命名规范、spec限制说明、CPUMockEnvironment使用）
-- [ ] 8.13 编写插件架构测试策略文档（继承、替换、注入的测试方法）
-- [ ] 8.14 编写pytest命令行参数使用文档（--exec-mode、--enable-mock、--performance-test等参数详细说明）
+- [x] 8.8 优化ST测试执行时间（选择性Mock、预生成数据缓存、session scope fixture共享）
+- [x] 8.9 配置CI门禁阈值（执行时间≤5分钟、覆盖率目标设置、NPU测试可选）
+- [x] 8.10 编写ST测试框架文档（README.md：框架说明、STRunner使用指南、插件测试职责说明、双模式使用指南）
+- [x] 8.11 编写ST测试编写规范文档（Docstring模板、参数化指南、异常测试模式、双模式测试指南）
+- [x] 8.12 编写Mock工厂函数使用指南（create_mock_*命名规范、spec限制说明、CPUMockEnvironment使用）
+- [x] 8.13 编写插件架构测试策略文档（继承、替换、注入的测试方法）
+- [x] 8.14 编写pytest命令行参数使用文档（--exec-mode、--enable-mock、--performance-test等参数详细说明）
 
 ## 9. 测试用例质量保障
 

@@ -15,18 +15,23 @@
 #
 
 # ST Test Runner Script
-# Supports single module execution, full execution, coverage, and dual-mode execution
+# Supports: single module, full execution, coverage, parallel, dual-mode
 
 set -e
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 ST_DIR=$(dirname "$SCRIPT_DIR")
+PROJECT_ROOT=$(dirname "$ST_DIR")
 
 # Default settings
-EXEC_MODE="auto"
+EXEC_MODE="cpu_mock"
 COVERAGE=false
+PARALLEL=""
 MODULE=""
 VERBOSE=false
+FAIL_UNDER=80
+MARKER=""
+EXTRA_ARGS=""
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -39,6 +44,10 @@ while [[ $# -gt 0 ]]; do
             COVERAGE=true
             shift
             ;;
+        --parallel)
+            PARALLEL="$2"
+            shift 2
+            ;;
         --module)
             MODULE="$2"
             shift 2
@@ -47,15 +56,23 @@ while [[ $# -gt 0 ]]; do
             VERBOSE=true
             shift
             ;;
+        --fail-under)
+            FAIL_UNDER="$2"
+            shift 2
+            ;;
+        -m|--marker)
+            MARKER="$2"
+            shift 2
+            ;;
         *)
-            echo "Unknown option: $1"
-            exit 1
+            EXTRA_ARGS="$EXTRA_ARGS $1"
+            shift
             ;;
     esac
 done
 
 # Build pytest command
-PYTEST_CMD="pytest"
+PYTEST_CMD="pytest -c $ST_DIR/pytest.ini"
 
 # Add verbose flag
 if [ "$VERBOSE" = true ]; then
@@ -65,9 +82,25 @@ fi
 # Add execution mode
 PYTEST_CMD="$PYTEST_CMD --exec-mode=$EXEC_MODE"
 
-# Add coverage
+# Add parallel execution (pytest-xdist)
+if [ -n "$PARALLEL" ]; then
+    PYTEST_CMD="$PYTEST_CMD -n $PARALLEL --dist=loadscope"
+fi
+
+# Add marker filter
+if [ -n "$MARKER" ]; then
+    PYTEST_CMD="$PYTEST_CMD -m $MARKER"
+fi
+
+# Add coverage (pytest-cov)
 if [ "$COVERAGE" = true ]; then
-    PYTEST_CMD="$PYTEST_CMD --cov=vllm_ascend --cov-report=term-missing --cov-report=xml:st-coverage.xml"
+    PYTEST_CMD="$PYTEST_CMD --cov=vllm_ascend \
+        --cov-config=$ST_DIR/.coveragerc \
+        --cov-report=term-missing \
+        --cov-report=xml:$ST_DIR/st-coverage.xml \
+        --cov-report=html:$ST_DIR/htmlcov_st \
+        --cov-fail-under=$FAIL_UNDER \
+        --cov-branch"
 fi
 
 # Determine test path
@@ -77,12 +110,43 @@ else
     TEST_PATH="$ST_DIR/"
 fi
 
+# Add extra arguments
+if [ -n "$EXTRA_ARGS" ]; then
+    PYTEST_CMD="$PYTEST_CMD $EXTRA_ARGS"
+fi
+
 # Execute tests
-echo "Running ST tests with command:"
+echo "======================================"
+echo "ST Test Runner"
+echo "======================================"
+echo "Execution mode: $EXEC_MODE"
+echo "Test path: $TEST_PATH"
+if [ -n "$PARALLEL" ]; then
+    echo "Parallel processes: $PARALLEL"
+fi
+if [ "$COVERAGE" = true ]; then
+    echo "Coverage enabled (threshold: $FAIL_UNDER%)"
+fi
+if [ -n "$MARKER" ]; then
+    echo "Marker filter: $MARKER"
+fi
+echo ""
+echo "Command:"
 echo "$PYTEST_CMD $TEST_PATH"
 echo ""
 
+cd "$PROJECT_ROOT"
 $PYTEST_CMD $TEST_PATH
 
 echo ""
+echo "======================================"
 echo "ST tests completed successfully!"
+echo "======================================"
+
+# Show coverage report if enabled
+if [ "$COVERAGE" = true ]; then
+    echo ""
+    echo "Coverage report saved to:"
+    echo "  - XML: $ST_DIR/st-coverage.xml"
+    echo "  - HTML: $ST_DIR/htmlcov_st/index.html"
+fi
