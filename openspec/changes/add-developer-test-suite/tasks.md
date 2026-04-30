@@ -64,20 +64,20 @@
 
 ## 4. Attention模块集成测试（插件内部协作 + 双模式 + 精度测试）
 
-- [ ] 4.1 创建tests/st/attention/目录和conftest.py（模块级fixtures、execution_environment fixture）
-- [ ] 4.2 使用Mock工厂函数创建Attention各组件Mock（create_mock_attention、create_mock_attention_mask含spec）
-- [ ] 4.3 实现AscendAttention与AscendAttentionMask集成测试（插件内部协作、多层Mock、参数化mask类型）
-- [ ] 4.4 验证AscendAttention实现了vllm.AttentionBackend接口（使用verify_plugin_interface_compatibility检查VLLM_ATTENTION_BACKEND_SPEC）
-- [ ] 4.5 测试AscendAttention替换逻辑正确性（接口兼容、组件协作）
-- [ ] 4.6 实现AscendAttention与AscendMLA集成测试（KV cache压缩、解压缩、Mock验证策略、插件内部协作）
-- [ ] 4.7 实现AscendAttention不同序列长度集成测试（参数化seq_len、setUp/tearDown管理tensor资源）
-- [ ] 4.8 实现AscendAttention与Torchair集成测试（图模式编译、异常场景验证）
-- [ ] 4.9 参数化双模式测试（exec_mode=["cpu_mock", "npu_real"]）
-- [ ] 4.10 实现NPU真实模式精度测试（对比CPU Mock和NPU结果、验证数值精度）
-- [ ] 4.11 吸纳tests/ut/attention/test_attention_v1.py优秀模式（详细Docstring、多层@patch）
-- [ ] 4.12 不测试vllm.Attention核心逻辑（明确ST测试聚焦插件内部协作）
-- [ ] 4.13 标记双模式测试用例（@pytest.mark.cpu_mock、@pytest.mark.npu_real）
-- [ ] 4.14 标记精度测试用例（@pytest.mark.npu_precision）
+- [x] 4.1 创建tests/st/attention/目录和conftest.py（模块级fixtures、execution_environment fixture）
+- [x] 4.2 使用Mock工厂函数创建Attention各组件Mock（create_mock_attention、create_mock_attention_mask含spec）
+- [x] 4.3 实现AscendAttention与AscendAttentionMask集成测试（插件内部协作、多层Mock、参数化mask类型）
+- [x] 4.4 验证AscendAttention实现了vllm.AttentionBackend接口（使用verify_plugin_interface_compatibility检查VLLM_ATTENTION_BACKEND_SPEC）
+- [x] 4.5 测试AscendAttention替换逻辑正确性（接口兼容、组件协作）
+- [x] 4.6 实现AscendAttention与AscendMLA集成测试（KV cache压缩、解压缩、Mock验证策略、插件内部协作）
+- [x] 4.7 实现AscendAttention不同序列长度集成测试（参数化seq_len、setUp/tearDown管理tensor资源）
+- [x] 4.8 实现AscendAttention与Torchair集成测试（图模式编译、异常场景验证）
+- [x] 4.9 参数化双模式测试（exec_mode=["cpu_mock", "npu_real"]）
+- [x] 4.10 实现NPU真实模式精度测试（对比CPU Mock和NPU结果、验证数值精度）
+- [x] 4.11 吸纳tests/ut/attention/test_attention_v1.py优秀模式（详细Docstring、多层@patch）
+- [x] 4.12 不测试vllm.Attention核心逻辑（明确ST测试聚焦插件内部协作）
+- [x] 4.13 标记双模式测试用例（@pytest.mark.cpu_mock、@pytest.mark.npu_real）
+- [x] 4.14 标记精度测试用例（@pytest.mark.npu_precision）
 
 ## 5. Quantization模块集成测试（插件内部协作 + 双模式 + 精度测试）
 
