@@ -50,17 +50,17 @@
 ## 3. Scheduler模块集成测试（插件内部协作 + 双模式）
 
 - [x] 3.1 创建tests/st/core/目录和conftest.py（模块级fixtures：scheduler_runner fixture、execution_environment fixture）
-- [ ] 3.2 使用Mock工厂函数创建Scheduler和Worker Mock对象（含spec限制）
-- [ ] 3.3 实现AscendScheduler与AscendSchedulerConfig集成测试（插件内部协作、STRunner管理资源）
-- [ ] 3.4 验证AscendScheduler实现了vllm.Scheduler接口（使用verify_plugin_interface_compatibility检查VLLM_SCHEDULER_SPEC）
-- [ ] 3.5 测试AscendScheduler替换逻辑正确性（调度协作、接口兼容）
-- [ ] 3.6 实现AscendScheduler与NPUWorker集成测试（参数化调度场景、Mock验证调用次数、插件内部协作）
-- [ ] 3.7 参数化双模式测试（exec_mode=["cpu_mock", "npu_real"]）
-- [ ] 3.8 实现AscendScheduler多批次调度集成测试（优先级调度、批次抢占、Docstring强制）
-- [ ] 3.9 实现AscendScheduler连续解码调度集成测试（prefill/decode阶段调度、异常场景验证）
-- [ ] 3.10 吸纳现有UT优秀模式（setUp初始化、tearDown清理）
-- [ ] 3.11 不测试vllm.Scheduler核心逻辑（明确ST测试聚焦插件内部协作）
-- [ ] 3.12 标记双模式测试用例（@pytest.mark.cpu_mock、@pytest.mark.npu_real）
+- [x] 3.2 使用Mock工厂函数创建Scheduler和Worker Mock对象（含spec限制）
+- [x] 3.3 实现AscendScheduler与AscendSchedulerConfig集成测试（插件内部协作、STRunner管理资源）
+- [x] 3.4 验证AscendScheduler实现了vllm.Scheduler接口（使用verify_plugin_interface_compatibility检查VLLM_SCHEDULER_SPEC）
+- [x] 3.5 测试AscendScheduler替换逻辑正确性（调度协作、接口兼容）
+- [x] 3.6 实现AscendScheduler与NPUWorker集成测试（参数化调度场景、Mock验证调用次数、插件内部协作）
+- [x] 3.7 参数化双模式测试（exec_mode=["cpu_mock", "npu_real"]）
+- [x] 3.8 实现AscendScheduler多批次调度集成测试（优先级调度、批次抢占、Docstring强制）
+- [x] 3.9 实现AscendScheduler连续解码调度集成测试（prefill/decode阶段调度、异常场景验证）
+- [x] 3.10 吸纳现有UT优秀模式（setUp初始化、tearDown清理）
+- [x] 3.11 不测试vllm.Scheduler核心逻辑（明确ST测试聚焦插件内部协作）
+- [x] 3.12 标记双模式测试用例（@pytest.mark.cpu_mock、@pytest.mark.npu_real）
 
 ## 4. Attention模块集成测试（插件内部协作 + 双模式 + 精度测试）
 
