@@ -24,7 +24,7 @@
 - [x] 1.22 添加pytest依赖到requirements-dev.txt（pytest-mock、pytest-cov、pytest-xdist、pytest-rerunfailures）
 - [x] 1.23 编写ST测试编写规范文档（强制Docstring模板、参数化指南、异常测试模式）
 - [x] 1.24 编写插件测试职责说明文档（明确ST测试聚焦插件内部协作、不测试vllm核心逻辑）
-- [ ] 1.25 编写pytest命令行参数使用文档（详细说明--exec-mode、--enable-mock、--performance-test等参数）
+- [x] 1.25 编写pytest命令行参数使用文档（详细说明--exec-mode、--enable-mock、--performance-test等参数）
 - [ ] 1.26 编写双模式执行策略文档（CPU Mock vs NPU真实模式使用场景、CI配置指南）
 
 ## 2. Worker模块集成测试（插件内部协作 + 双模式）
