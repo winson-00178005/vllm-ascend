@@ -30,8 +30,8 @@
 ## 2. Worker模块集成测试（插件内部协作 + 双模式）
 
 - [x] 2.1 创建tests/st/worker/目录和conftest.py（模块级fixtures：worker_runner fixture、worker_config参数化fixture、execution_environment fixture）
-- [ ] 2.2 使用Mock工厂函数创建Worker和ModelRunner Mock对象（create_mock_worker、create_mock_model_runner含spec限制）
-- [ ] 2.3 实现NPUWorker与AscendModelRunner集成测试（插件内部协作、STRunner管理资源）
+- [x] 2.2 使用Mock工厂函数创建Worker和ModelRunner Mock对象（create_mock_worker、create_mock_model_runner含spec限制）
+- [x] 2.3 实现NPUWorker与AscendModelRunner集成测试（插件内部协作、STRunner管理资源）
 - [ ] 2.4 验证NPUWorker实现了vllm.Worker接口（使用verify_plugin_interface_compatibility检查VLLM_WORKER_SPEC）
 - [ ] 2.5 测试NPUWorker替换逻辑正确性（初始化ModelRunner、调度协作、接口兼容）
 - [ ] 2.6 参数化多维度测试（batch_size=[1,16,32]、scenario=["normal","error"]、dtype=["float16","bfloat16"])
