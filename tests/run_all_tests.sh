@@ -32,6 +32,7 @@ VERBOSE=false
 ST_EXEC_MODE="auto"
 ST_MODULE=""
 E2E_TYPE="singlecard"
+USE_FAKE=false  # WSL环境：使用fake torch_npu
 
 # 解析参数
 while [[ $# -gt 0 ]]; do
@@ -46,6 +47,13 @@ while [[ $# -gt 0 ]]; do
             ;;
         --run-e2e)
             RUN_E2E=true
+            shift
+            ;;
+        --use-fake)
+            # WSL环境：使用fake torch_npu快速验证框架
+            USE_FAKE=true
+            ST_EXEC_MODE="cpu_mock"  # 强制CPU Mock模式
+            _warning "启用fake torch_npu模式（仅验证框架）"
             shift
             ;;
         --coverage)
@@ -76,6 +84,9 @@ done
 
 # 环境设置
 setup_vllm_env
+
+# WSL环境：自动处理torch_npu依赖
+auto_handle_torch_npu "$USE_FAKE"
 
 _cyan "======================================"
 _cyan "Running All Tests"

@@ -29,6 +29,7 @@ COVERAGE=false
 VERBOSE=false
 ST_EXEC_MODE="cpu_mock"  # 默认使用CPU Mock模式
 ST_MODULE=""
+USE_FAKE=false  # 是否使用fake torch_npu
 
 # 解析参数
 while [[ $# -gt 0 ]]; do
@@ -62,6 +63,9 @@ done
 
 # 环境设置
 setup_vllm_env
+
+# WSL环境：自动处理torch_npu依赖
+auto_handle_torch_npu "$USE_FAKE"
 
 _cyan "======================================"
 _cyan "Running UT + ST Tests"

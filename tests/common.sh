@@ -43,6 +43,7 @@ _info() { _cyan "Info: $*"; }
 _warn() { _yellow "Warn: $*"; }
 _err() { _red "Error: $*" && exit 1; }
 _success() { _green "Success: $*"; }
+_fail() { _red "Failed: $*"; return 1; }
 
 # 环境检查函数
 check_torch_npu() {
@@ -57,6 +58,88 @@ check_cann_env() {
     if [ -d "/usr/local/Ascend/ascend-toolkit" ]; then
         return 0
     else
+        return 1
+    fi
+}
+
+# WSL环境特殊处理：自动创建fake torch_npu
+setup_fake_torch_npu() {
+    _warning "torch_npu未安装，创建临时fake模块（仅验证框架）"
+    
+    FAKE_DIR="/tmp/fake_torch_npu_$$"
+    mkdir -p "$FAKE_DIR"
+    
+    cat > "$FAKE_DIR/__init__.py" << 'EOF'
+import torch
+
+def npu_current_stream(device=None):
+    try: return torch.cuda.current_stream()
+    except: return None
+
+def npu_stream(stream):
+    try: return torch.cuda.stream(stream)
+    except: return stream
+
+def npu_device_count(): return 0
+def npu_set_device(device): pass
+def npu_synchronize():
+    try: torch.cuda.synchronize()
+    except: pass
+
+torch.npu = type('obj', (object,), {
+    'is_available': lambda: False,
+    'device_count': npu_device_count,
+    'current_stream': npu_current_stream,
+    'stream': npu_stream,
+})
+
+__version__ = "fake-0.1.0"
+EOF
+    
+    export PYTHONPATH="$FAKE_DIR:$PYTHONPATH"
+    _info "fake torch_npu已创建: $FAKE_DIR"
+    
+    # 验证fake模块
+    if python3 -c "import torch_npu" 2>/dev/null; then
+        _success "fake torch_npu验证成功"
+        return 0
+    else
+        _err "fake torch_npu创建失败"
+        return 1
+    fi
+}
+
+# 自动处理torch_npu依赖
+auto_handle_torch_npu() {
+    local use_fake="${1:-false}"
+    
+    if check_torch_npu; then
+        _success "torch_npu环境正常"
+        return 0
+    fi
+    
+    # torch_npu缺失时的处理
+    if [ "$use_fake" = true ]; then
+        _warning "使用fake torch_npu模式（仅验证框架）"
+        setup_fake_torch_npu || return 1
+        
+        # 设置标记，告知后续测试使用fake环境
+        export VLLM_USE_FAKE_TORCH_NPU=true
+        export VLLM_EXEC_MODE=cpu_mock
+        
+        _warning "⚠️  重要提醒:"
+        _warning "  • 使用fake torch_npu环境"
+        _warning "  • 仅验证测试框架设计"
+        _warning "  • 不验证真实NPU功能"
+        _warning "  • 某些测试可能失败"
+        
+        return 0
+    else
+        _err "torch_npu缺失，测试无法执行"
+        _info "解决方案:"
+        _info "  1. 安装CANN环境: https://www.hiascend.com/document"
+        _info "  2. 使用Docker容器: quay.io/ascend/cann:8.2.rc1"
+        _info "  3. 使用 --use-fake 参数快速验证框架"
         return 1
     fi
 }
@@ -77,6 +160,13 @@ run_ut_tests() {
     
     _info "====> Running UT tests"
     
+    # 先验证环境，避免ImportError导致脚本提前退出
+    if ! python3 -c "import vllm_ascend" 2>/dev/null; then
+        _warning "vllm_ascend导入失败，请检查环境依赖"
+        _info "提示: 使用 --use-fake 参数创建fake torch_npu环境"
+        return 1
+    fi
+    
     PYTEST_CMD="pytest"
     if [ "$verbose" = true ]; then
         PYTEST_CMD="$PYTEST_CMD -sv"
@@ -90,9 +180,16 @@ run_ut_tests() {
     
     _info "Command: $PYTEST_CMD"
     cd "$PROJECT_ROOT"
-    $PYTEST_CMD
+    
+    # 执行pytest并捕获退出状态
+    $PYTEST_CMD || {
+        local pytest_status=$?
+        _fail "====> UT tests failed (exit code: $pytest_status)"
+        return $pytest_status
+    }
     
     _success "====> UT tests passed"
+    return 0
 }
 
 run_st_tests() {
@@ -103,6 +200,13 @@ run_st_tests() {
     
     _info "====> Running ST tests"
     _info "Execution mode: $exec_mode"
+    
+    # 先验证环境，避免ImportError导致脚本提前退出
+    if ! python3 -c "import vllm_ascend" 2>/dev/null; then
+        _warning "vllm_ascend导入失败，请检查环境依赖"
+        _info "提示: 使用 --use-fake 参数创建fake torch_npu环境"
+        return 1
+    fi
     
     # 自动检测模式
     if [ "$exec_mode" = "auto" ]; then
@@ -139,9 +243,16 @@ run_st_tests() {
     
     _info "Command: $PYTEST_CMD"
     cd "$PROJECT_ROOT"
-    $PYTEST_CMD
+    
+    # 执行pytest并捕获退出状态
+    $PYTEST_CMD || {
+        local pytest_status=$?
+        _fail "====> ST tests failed (exit code: $pytest_status)"
+        return $pytest_status
+    }
     
     _success "====> ST tests passed"
+    return 0
 }
 
 run_e2e_tests() {
@@ -150,6 +261,13 @@ run_e2e_tests() {
     
     _info "====> Running E2E tests"
     _info "Test type: $test_type"
+    
+    # 先验证环境，避免ImportError导致脚本提前退出
+    if ! python3 -c "import vllm_ascend" 2>/dev/null; then
+        _warning "vllm_ascend导入失败，请检查环境依赖"
+        _info "提示: E2E测试需要真实NPU环境，请在Docker容器或CANN环境中执行"
+        return 1
+    fi
     
     if [ "$test_type" = "singlecard" ]; then
         TEST_PATH="tests/e2e/singlecard/"
@@ -168,9 +286,16 @@ run_e2e_tests() {
     
     _info "Command: $PYTEST_CMD"
     cd "$PROJECT_ROOT"
-    $PYTEST_CMD
+    
+    # 执行pytest并捕获退出状态
+    $PYTEST_CMD || {
+        local pytest_status=$?
+        _fail "====> E2E tests failed (exit code: $pytest_status)"
+        return $pytest_status
+    }
     
     _success "====> E2E tests passed"
+    return 0
 }
 
 # 环境设置函数
