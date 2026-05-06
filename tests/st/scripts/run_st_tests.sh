@@ -15,7 +15,12 @@
 #
 
 # ST Test Runner Script
-# Supports: single module, full execution, coverage, parallel, dual-mode
+# Supports: single module, full execution, coverage, parallel, dual-mode, auto-detect
+# 
+# Usage examples:
+#   ./run_st_tests.sh --exec-mode=auto --coverage  # Auto-detect mode with coverage
+#   ./run_st_tests.sh --module=worker --quick      # Quick test for worker module
+#   ./run_st_tests.sh --parallel=4 --coverage      # Parallel execution with coverage
 
 set -e
 
@@ -32,6 +37,15 @@ VERBOSE=false
 FAIL_UNDER=80
 MARKER=""
 EXTRA_ARGS=""
+
+# Auto-detect execution environment
+detect_exec_mode() {
+    if python3 -c "import torch_npu; import torch; assert torch.npu.is_available()" 2>/dev/null; then
+        echo "npu_real"
+    else
+        echo "cpu_mock"
+    fi
+}
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -64,12 +78,24 @@ while [[ $# -gt 0 ]]; do
             MARKER="$2"
             shift 2
             ;;
+        --quick)
+            # Quick mode: only run essential tests
+            MODULE="worker"
+            FAIL_UNDER=60
+            shift
+            ;;
         *)
             EXTRA_ARGS="$EXTRA_ARGS $1"
             shift
             ;;
     esac
 done
+
+# Auto-detect execution mode if requested
+if [ "$EXEC_MODE" = "auto" ]; then
+    EXEC_MODE=$(detect_exec_mode)
+    echo "Auto-detected execution mode: $EXEC_MODE"
+fi
 
 # Build pytest command
 PYTEST_CMD="pytest -c $ST_DIR/pytest.ini"
